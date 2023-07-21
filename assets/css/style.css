@@ -1,0 +1,62 @@
+* {
+    scrollbar-width: none; /* Hide scrollbar on Firefox */
+}
+
+/* Hide scrollbar on webkit-based browsers */
+*::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+}
+
+/* Optional: Add this to remove any possible space taken by the scrollbar */
+*::-webkit-scrollbar-thumb {
+    display: none;
+}
+
+.hotbar {
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.weather-item {
+    background: rgba(170, 37, 201, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(8.5px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.gradient-border-light {
+    background: linear-gradient(1turn, #00dc82, #fff, rgba(54, 228, 218, 0.5), rgba(29, 224, 177, 0.3));
+    background: linear-gradient(var(--gradient-angle), #00dc82, #fff, rgba(54, 228, 218, 0.5), rgba(29, 224, 177, 0.3));
+}
+
+.gradient-border-dark {
+    background: linear-gradient(1turn, hsla(0, 0%, 100%, 0.5), hsla(0, 0%, 100%, 0.1), #fff, hsla(0, 0%, 100%, 0.3));
+    background: linear-gradient(
+        var(--gradient-angle),
+        hsla(0, 0%, 100%, 0.5),
+        hsla(0, 0%, 100%, 0.1),
+        #fff,
+        hsla(0, 0%, 100%, 0.3)
+    );
+}
+
+.slide:hover .gradient-border {
+    animation: gradient-rotate 5s linear 0s infinite reverse;
+    opacity: 1;
+    transition: all 0.3s linear;
+}
+
+@keyframes gradient-rotate {
+    0% {
+        --gradient-angle: 360deg;
+    }
+
+    to {
+        --gradient-angle: 0deg;
+    }
+}

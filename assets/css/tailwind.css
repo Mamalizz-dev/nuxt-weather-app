@@ -7,4 +7,5 @@
     --secondary-gradient : linear-gradient(68deg, rgba(89,54,180,1) 0%, rgba(54,42,132,1) 100%);
     --light-shadow : #48319D;
     --dark-shadow : #1F1D47;
+    --gradient-angle: 360deg
 }
