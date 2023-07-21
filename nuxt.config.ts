@@ -2,6 +2,9 @@
 export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: ['@vueuse/nuxt', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt'],
+  build: {
+    transpile: ['gsap'],
+  },
   //@ts-ignore
   piniaPersistedstate: {
     storage: 'sessionStorage'

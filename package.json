@@ -23,6 +23,7 @@
     "@pinia-plugin-persistedstate/nuxt": "^1.1.1",
     "@pinia/nuxt": "^0.4.11",
     "@vueuse/nuxt": "^10.2.1",
+    "gsap": "^3.12.2",
     "pinia": "^2.1.4"
   }
 }
