@@ -21,12 +21,18 @@
     border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
-.weather-item {
+.hotbar-item {
     background: rgba(170, 37, 201, 0.3);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    box-shadow: 0 8px 32px 0 rgba(109, 31, 135, 0.37);
     backdrop-filter: blur(8.5px);
     -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.hotbar-buttons{
+    background: rgba( 170, 37, 201, 0.1 );
+    backdrop-filter: blur( 20px );
+    -webkit-backdrop-filter: blur( 20px );
 }
 
 .gradient-border-light {
