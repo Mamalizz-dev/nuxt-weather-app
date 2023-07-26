@@ -1,9 +1,10 @@
 <script setup lang="ts">
     const { width: windowWidth, height: windowHeight } = useWindowSize()
     const toggleSlide = ref<boolean>(false)
-    const touchStartPosition = ref<any>(0)
+    const touchStartPosition = ref<any>(windowHeight.value / 2)
     const touchCurrentPosition = ref<any>(0)
-    const hotbarStatus = ref<string>('')
+    const hotbarStatus = ref<string>('middle')
+    const hotbar = ref<HTMLDivElement | null>(null)
 
     const toggleMove = (event: any) => {
         toggleSlide.value = !toggleSlide.value
@@ -15,9 +16,14 @@
         if (touchStartPosition.value !== null) {
             touchCurrentPosition.value = windowHeight.value - event.touches[0].clientY;
             const touchDelta = touchCurrentPosition.value - touchStartPosition.value;
-            if(touchCurrentPosition.value > windowHeight.value / 2){
-
+            if (touchCurrentPosition.value > windowHeight.value / 1.5) {
+                hotbarStatus.value = 'top';
+            } else if (touchCurrentPosition.value >= windowHeight.value / 1.5 - 150) {
+                hotbarStatus.value = 'middle';
+            } else {
+                hotbarStatus.value = 'bottom';
             }
+
             // toggleSlide.value = touchDelta > 50; // Adjust this threshold as needed 
         }
     }
@@ -27,12 +33,54 @@
         touchStartPosition.value = null;
     }
 
+
+    const hotbarHeightStyle = computed(() => {
+        if (toggleSlide.value){
+            return `${touchCurrentPosition.value}px`
+        } else {
+            if (hotbarStatus.value == 'top'){
+                return `${windowHeight.value - 20}px`
+            } else if (hotbarStatus.value == 'middle') {
+                return `${windowHeight.value / 2}px`
+            } else {
+                return `8rem`
+            }
+        }
+    })
+
+    watch([hotbarHeightStyle, hotbarStatus], ([hotbarHeight, status]) => {
+        const element: HTMLDivElement | null = document.querySelector('.degree');
+        const hotbarElement: HTMLDivElement | null = hotbar.value;
+        if (element && hotbarElement) {
+            const screenHeight: number = windowHeight.value;
+            const halfScreenHeight: number = screenHeight / 2; // Half of the screen height
+            const triggerPosition: number = halfScreenHeight; // The position where we start fading out
+            const fadeOutHeight: number = screenHeight / 3; // The position at which fading out completes (approximately 1/3 of the screen height)
+            const opacityRange: number = 1; // The range of opacity values (0 to 1)
+
+            // Calculate the opacity based on the hotbarHeight relative to the trigger position
+            let opacity = 1;
+            if (hotbarHeight <= halfScreenHeight || status === 'middle') {
+            opacity = 1;
+            } else if (hotbarHeight > halfScreenHeight && hotbarHeight <= fadeOutHeight) {
+            opacity = 1 - (hotbarHeight - triggerPosition) / (fadeOutHeight - triggerPosition);
+            } else if (hotbarHeight > fadeOutHeight || status === 'top') {
+            opacity = 0;
+            }
+
+            opacity = Math.min(Math.max(opacity, 0), opacityRange); // Clamp the opacity between 0 and 1
+
+            // Apply the calculated opacity as a style property
+            element.style.opacity = opacity.toString();
+        }
+    });
+
 </script>
 
 
 <template>
-    <div class="fixed bottom-0 w-full hotbar rounded-t-[2.5rem] transition" :style="{height: toggleSlide ? `${touchCurrentPosition}px` : `${windowHeight / 2.3}px`, minHeight: `${windowHeight / 2.7}px`}">
-        <div class="flex items-center justify-center w-full h-6"
+    <div class="fixed bottom-0 w-full hotbar rounded-t-[2.5rem] transition-all duration-200 ease-out" ref="hotbar" :style="{height: hotbarHeightStyle}">
+        <div class="flex items-center justify-center w-full h-10"
             @touchstart="toggleMove"
             @touchmove="onTouchMove"
             @touchend="onTouchEnd"

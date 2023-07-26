@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <div class="flex flex-col items-center absolute inset-0 top-[20%]">
+    <div class="flex flex-col items-center absolute inset-0 top-[15%] degree">
         <h1 class="text-[2rem] text-white">
             <i class="fa-solid fa-location-dot"></i>
             Shiraz
@@ -38,3 +38,11 @@
 
     <Hotbar />
 </template>
+
+
+<style>
+.degree {
+  transition: opacity 0.3s ease-out; /* Adjust the duration and easing as needed */
+  opacity: 1; /* Initially set the opacity to 1 */
+}
+</style>
