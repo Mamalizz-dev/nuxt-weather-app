@@ -25,5 +25,10 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+
+  runtimeConfig: {
+    BASE_URL: process.env.NUXT_API_BASE_URL,
+    API_KEY : process.env.NUXT_API_KEY
+  }
   
 })

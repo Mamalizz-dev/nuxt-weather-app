@@ -36,7 +36,25 @@
         </div>
     </div>
 
-    <Hotbar />
+    <client-only>
+        <Hotbar />
+    </client-only>
+<!-- 
+    <div class="fixed bottom-0 flex justify-between w-full h-20 px-10 hotbar-buttons rounded-t-xl">
+        <div class="flex items-center justify-start w-1/3">
+            <i class="text-white scale-125 fa-solid fa-location-dot"></i>
+        </div>
+
+        <div class="flex justify-center w-1/3">
+            <div class="flex items-center justify-center w-32 h-32 pb-10 bg-white rounded-t-full shadow-md shadow-white">
+                <i class="text-black scale-150 fa-solid fa-plus"></i>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-end w-1/3 h-full">
+            <i class="text-white scale-125 fa-solid fa-ellipsis-vertical"></i>
+        </div>
+    </div>   -->
 </template>
 
 
