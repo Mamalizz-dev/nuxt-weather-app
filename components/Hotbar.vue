@@ -3,6 +3,8 @@
 // import
 
     import Slider from "vue3-slider"
+    import { useHomeService } from '~/composables/useHomeServices'
+    import { useAirQuality } from '~/utils/useAirQuality'
 
 // state
 
@@ -12,6 +14,43 @@
     const touchCurrentPosition = ref<any>(0)
     const hotbar = ref<HTMLDivElement | null>(null)
     const hotbarPosition = ref<string>('middle')
+    
+    const { homeCurrentLocationData } = useHomeService()
+
+
+// computed
+
+    const hotbarHeightStyle = computed(() => {
+        if (toggleSlide.value){
+            return `${touchCurrentPosition.value}px`
+        } else {
+            if (hotbarPosition.value == 'top'){
+                return `${windowHeight.value - 20}px`
+            } else if (hotbarPosition.value == 'middle') {
+                return `${windowHeight.value / 2 - 60}px`
+            } else {
+                return `8rem`
+            }
+        }
+    })
+
+    const airQualityPercent = computed(() => {
+        //@ts-ignore
+        return useAirQuality(homeCurrentLocationData.value.current.air_quality)
+    })
+
+    const uvPercent = computed(() => {
+        //@ts-ignore
+        return (homeCurrentLocationData.value.current.uv / 10) * 100
+    })
+
+    const pressurePercent = computed(() => {
+        //@ts-ignore
+        return homeCurrentLocationData.value.current.pressure_in
+    })
+    
+
+// methods
 
     const toggleMove = (event: any) => {
         toggleSlide.value = !toggleSlide.value
@@ -30,8 +69,6 @@
             } else {
                 hotbarPosition.value = 'bottom';
             }
-
-            // toggleSlide.value = touchDelta > 50; // Adjust this threshold as needed 
         }
     }
 
@@ -39,21 +76,8 @@
         toggleSlide.value = false
         touchStartPosition.value = null;
     }
-
-
-    const hotbarHeightStyle = computed(() => {
-        if (toggleSlide.value){
-            return `${touchCurrentPosition.value}px`
-        } else {
-            if (hotbarPosition.value == 'top'){
-                return `${windowHeight.value - 20}px`
-            } else if (hotbarPosition.value == 'middle') {
-                return `${windowHeight.value / 2 - 60}px`
-            } else {
-                return `8rem`
-            }
-        }
-    })
+    
+// watch
 
     watch([hotbarHeightStyle, hotbarPosition], ([hotbarHeight, status]) => {
         const locationDegrees: HTMLDivElement | null = document.querySelector('.degree')!;
@@ -129,8 +153,8 @@
             
                 <template #content>
                     <div class="flex flex-col gap-4 range-progress">
-                        <p class="text-[--primary-text-color] text-xl font-semibold">3-Low Health Risk</p>
-                        <Slider v-model="nu" />
+                        <p class="text-[--primary-text-color] text-xl font-semibold">{{ airQualityPercent.text  }}</p>
+                        <Slider v-model="airQualityPercent.percent" class="pointer-events-none" />
                     </div>
                 </template>
 
@@ -146,10 +170,10 @@
                 <template #content>
                     <div class="flex flex-col gap-4 pt-2 range-progress">
                         <div class="flex flex-col">
-                            <p class="text-[--primary-text-color] text-2xl font-semibold">4</p>
+                            <p class="text-[--primary-text-color] text-2xl font-semibold"> {{ homeCurrentLocationData.current.uv }} </p>
                             <p class="text-[--primary-text-color] text-xl font-semibold">Moderate</p>
                         </div>
-                        <Slider v-model="nu" color="#FB278D" track-color="#FEFEFE" />
+                        <Slider v-model="uvPercent" color="#FB278D" track-color="#FEFEFE" class="pointer-events-none" />
                     </div>
                 </template>
             </HotbarItem>
@@ -170,17 +194,17 @@
 
             <HotbarItem :icon-classes="`fa-solid fa-wind`" title="WIND" :with-footer="false">
                 <template #content>
-                    <Compass :wind-speed="34" :wind-angle="10" />
+                    <Compass :wind-speed="homeCurrentLocationData.current.wind_kph" :wind-angle="homeCurrentLocationData.current.wind_degree" />
                 </template>
             </HotbarItem>
 
             <HotbarItem :icon-classes="`fa-solid fa-cloud`" title="CLOUD" :item-classes="`justify-between`">
                 <template #content>
-                    <p class="text-[--primary-text-color] text-3xl font-semibold">75%</p>
+                    <p class="text-[--primary-text-color] text-3xl font-semibold"> {{ homeCurrentLocationData.current.cloud }} %</p>
                 </template>
 
                 <template #footer>
-                    <p class="text-[--primary-text-color] text-md font-semibold">Wind dir: W</p>
+                    <p class="text-[--primary-text-color] text-md font-semibold">Wind dir: {{ homeCurrentLocationData.current.wind_dir }}</p>
                 </template>
             </HotbarItem>
             
@@ -196,31 +220,31 @@
             
             <HotbarItem :icon-classes="`fa-solid fa-temperature-low`" title="HUMIDITY" :item-classes="`justify-between`">
                 <template #content>
-                    <p class="text-[--primary-text-color] text-3xl font-semibold">47%</p>
+                    <p class="text-[--primary-text-color] text-3xl font-semibold">{{ homeCurrentLocationData.current.feelslike_c }}%</p>
                 </template>
 
                 <template #footer>
-                    <p class="text-[--primary-text-color] text-md font-semibold">Based on actual temperature</p>
+                    <p class="text-[--primary-text-color] text-sm font-semibold">Based on actual temperature</p>
                 </template>
             </HotbarItem>
 
             <HotbarItem :icon-classes="`fa-solid fa-eye`" title="VISIBILITY" :item-classes="`justify-between`">
                 <template #content>
                     <div class="flex items-end gap-1 pb-5">
-                        <p class="text-[--primary-text-color] text-[2rem] font-semibold">8</p>
+                        <p class="text-[--primary-text-color] text-[2rem] font-semibold">{{ homeCurrentLocationData.current.vis_km }}</p>
                         <p class="text-[--primary-text-color] text-xl font-semibold">/kph</p>
                     </div>
                 </template>
 
                 <template #footer>
-                    <p class="text-[--primary-text-color] text-md font-semibold">Based on actual temperature</p>
+                    <p class="text-[--primary-text-color] text-sm font-semibold">Based on actual temperature</p>
                 </template>
             </HotbarItem>
 
             <HotbarItem :icon-classes="`fa-solid fa-gauge-high`" title="PRESSURE" :item-classes="`justify-between`" :with-footer="false">
                 <template #content>
-                    <div class="flex justify-center range-progress">
-                        <Slider v-model="nu" orientation="circular" track-color="purple" width="100px" :tooltip="true" />
+                    <div class="flex justify-center pointer-events-none range-progress">
+                        <Slider v-model="pressurePercent" orientation="circular" track-color="purple" width="100px" :tooltip="true" />
                     </div>
                 </template>
             </HotbarItem>

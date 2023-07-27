@@ -8,19 +8,26 @@ export const useHomeService = () => {
 
 // methods
 
-    const setHomeCurrentLocationData = (data: any) => {
-        store.setCurrentLocationData(data)
+    const setHomeCurrentData = (data: any) => {
+        store.setCurrentData(data)
+    }
+
+    const setHomeForecastData = (data: any) => {
+        store.setForecastData(data)
     }
 
 // computed
 
-    const homeCurrentLocationData = computed(() => store.getCurrentLocationData)
+    const homeCurrentData = computed(() => store.getCurrentData)
+    const homeforecastData = computed(() => store.getCurrentData)
 
 
 
 
     return {
-        setHomeCurrentLocationData,
-        homeCurrentLocationData
+        setHomeCurrentData,
+        homeCurrentData,
+        setHomeForecastData,
+        homeforecastData
     }
 }

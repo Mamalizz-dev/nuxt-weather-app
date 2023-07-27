@@ -4,7 +4,6 @@
 
     import { useUserLocation } from '~/composables/useUserLocation'
     import { useHomeService } from '~/composables/useHomeServices'
-    import { useCurrentStore } from '~/stores'
 
 // state
 
@@ -13,7 +12,11 @@
 
 // methods
 
-    const { data : currentData , pending } = await useLazyFetch<any>('/api/current?location=shiraz')
+    // const { data : currentData , pending } = await useLazyFetch<any>('/api/current?location=shiraz')
+    // if(!!currentData.value){
+    //     setHomeCurrentLocationData(currentData.value)
+    // }
+    const { data : currentData , pending } = await useLazyFetch<any>('/api/forecast?location=shiraz')
     if(!!currentData.value){
         setHomeCurrentLocationData(currentData.value)
     }

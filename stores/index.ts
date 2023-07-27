@@ -2,17 +2,27 @@ import { defineStore } from "pinia";
 
 export const useStore = defineStore('Store', {
     state: () => ({
-        currentLocationData : {}
+        current : {},
+        forecast : {}
     }),
 
     getters: {
-        getCurrentLocationData: (state) => state.currentLocationData
+        getCurrentData: (state) => state.current,
+        getForecastData: (state) => state.forecast
     },
 
     actions: {
-        setCurrentLocationData(payload: any){
+
+        setCurrentData(payload: any){
             try {
-                this.currentLocationData = payload
+                this.current = payload
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        setForecastData(payload: any){
+            try {
+                this.current = payload
             } catch (error) {
                 console.log(error);
             }
