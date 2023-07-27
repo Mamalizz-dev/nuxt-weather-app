@@ -15,7 +15,7 @@
     const hotbar = ref<HTMLDivElement | null>(null)
     const hotbarPosition = ref<string>('middle')
     
-    const { homeCurrentData } = useHomeService()
+    const { homeCurrentData, homeforecastData } = useHomeService()
 
 
 // computed
@@ -140,10 +140,11 @@
         </div>
 
         <div class="flex w-full gap-5 px-5 py-4 mt-3 overflow-scroll">
-            <div v-for="(item, index) in 10" :key="index" class="min-w-1/5 shrink-0 min-h-[10rem] rounded-full hotbar-item flex flex-col items-center justify-between px-3 py-5">
-                <p class="text-white text-md">12 AM</p>
-                <i class="text-white scale-150 fa-solid fa-cloud-showers-heavy"></i>
-                <p class="text-white text-md">64°</p>
+            <div v-for="(hour, index) in homeforecastData.forecast.forecastday[0].hour" :key="`day-${index}`" class="w-[4.8rem] shrink-0 min-h-[10rem] rounded-full hotbar-item flex flex-col items-center justify-between px-3 py-5">
+                <p class="text-white text-md">{{ (hour.time).split(' ').pop() }}</p>
+                <!-- <i class="text-white scale-150 fa-solid fa-cloud-showers-heavy"></i> -->
+                <img :src="hour.condition.icon" class="w-full scale-150" :alt="hour.condition.text">
+                <p class="text-white text-md">{{ hour.temp_c }}°</p>
             </div>
         </div>
 
@@ -182,13 +183,13 @@
                 <template #content>
                     <div class="flex flex-col gap-4 pt-2">
                         <div class="flex flex-col">
-                            <p class="text-[--primary-text-color] text-3xl font-semibold">5:32 AM</p>
+                            <p class="text-[--primary-text-color] text-2xl font-semibold">{{ homeforecastData.forecast.forecastday[0].astro.sunrise }}</p>
                         </div>
                     </div>
                 </template>
 
                 <template #footer>
-                    <p class="text-[--primary-text-color] text-md font-semibold">5:32 AM</p>
+                    <p class="text-[--primary-text-color] text-md font-semibold">{{ homeforecastData.forecast.forecastday[0].astro.sunset }}</p>
                 </template>
             </HotbarItem>
 

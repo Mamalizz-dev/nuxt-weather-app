@@ -9,7 +9,7 @@ export default defineNuxtConfig({
   alias : {
     "@assets": "<rootDir>/assets"
   },
-  modules: ['@vueuse/nuxt', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt'],
+  modules: ['@vueuse/nuxt', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt', '@vueuse/motion/nuxt'],
   build: {
     transpile: ['gsap'],
   },

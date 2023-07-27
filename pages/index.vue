@@ -35,20 +35,30 @@
     </div>
 
     <div class="flex flex-col items-center absolute inset-0 top-[15%] degree">
-        <h1 class="text-[2rem] text-white items-center flex gap-2">
+        <h1 class="text-[2.5rem] text-white items-center flex gap-2">
             <i class="fa-solid fa-location-dot"></i>
             {{ homeCurrentData.location.name ?? 'Undefined' }}
             <p class="pt-4 text-sm">/ {{ homeCurrentData.location.region }}</p>
         </h1>
-        <h2 class="text-[5rem] text-white pl-6">
-            {{ homeCurrentData.current.temp_c ?? 0 }}°
-        </h2>
-        <div class="flex">  
-            <p class="text-sm text-white">
-                Last Update : {{ homeCurrentData.current.last_updated ?? `--:--:--` }}
+        <div class="w-1/2 h-[7rem] flex items-center justify-center">
+            <img :src="(homeCurrentData.current.condition.icon).replace('64x64', '128x128')" class="w-[10rem] scale-125 h-[10rem] bg-cover" :alt="homeCurrentData.current.condition.text">
+        </div>
+        <p class="text-white text-[2.2rem] -mt-2">
+            {{ homeCurrentData.current.condition.text }}
+        </p>
+        <div class="flex gap-x-5">  
+            <p class="text-lg text-white">
+                C: {{ homeCurrentData.current.temp_c ?? 0 }}°
+            </p>
+            <p class="text-lg text-white">
+                F: {{ homeCurrentData.current.temp_c ?? 0 }}°F
             </p>
         </div>
     </div>
+    
+    <p class="absolute inset-0 flex justify-center text-sm text-white top-10 text-opacity-30">
+        Last Update : {{ homeCurrentData.current.last_updated ?? `--:--:--` }}
+    </p>
 
     <client-only>
         <Hotbar />
@@ -77,4 +87,4 @@
   transition: opacity 0.3s ease-out; /* Adjust the duration and easing as needed */
   opacity: 1; /* Initially set the opacity to 1 */
 }
-</style>../stores/main../composables/useUserLocation../composables/useHomeServices
+</style>
