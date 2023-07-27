@@ -15,7 +15,7 @@
     const hotbar = ref<HTMLDivElement | null>(null)
     const hotbarPosition = ref<string>('middle')
     
-    const { homeCurrentLocationData } = useHomeService()
+    const { homeCurrentData } = useHomeService()
 
 
 // computed
@@ -36,17 +36,17 @@
 
     const airQualityPercent = computed(() => {
         //@ts-ignore
-        return useAirQuality(homeCurrentLocationData.value.current.air_quality)
+        return useAirQuality(homeCurrentData.value.current.air_quality)
     })
 
     const uvPercent = computed(() => {
         //@ts-ignore
-        return (homeCurrentLocationData.value.current.uv / 10) * 100
+        return (homeCurrentData.value.current.uv / 10) * 100
     })
 
     const pressurePercent = computed(() => {
         //@ts-ignore
-        return homeCurrentLocationData.value.current.pressure_in
+        return homeCurrentData.value.current.pressure_in
     })
     
 
@@ -170,7 +170,7 @@
                 <template #content>
                     <div class="flex flex-col gap-4 pt-2 range-progress">
                         <div class="flex flex-col">
-                            <p class="text-[--primary-text-color] text-2xl font-semibold"> {{ homeCurrentLocationData.current.uv }} </p>
+                            <p class="text-[--primary-text-color] text-2xl font-semibold"> {{ homeCurrentData.current.uv }} </p>
                             <p class="text-[--primary-text-color] text-xl font-semibold">Moderate</p>
                         </div>
                         <Slider v-model="uvPercent" color="#FB278D" track-color="#FEFEFE" class="pointer-events-none" />
@@ -194,17 +194,17 @@
 
             <HotbarItem :icon-classes="`fa-solid fa-wind`" title="WIND" :with-footer="false">
                 <template #content>
-                    <Compass :wind-speed="homeCurrentLocationData.current.wind_kph" :wind-angle="homeCurrentLocationData.current.wind_degree" />
+                    <Compass :wind-speed="homeCurrentData.current.wind_kph" :wind-angle="homeCurrentData.current.wind_degree" />
                 </template>
             </HotbarItem>
 
             <HotbarItem :icon-classes="`fa-solid fa-cloud`" title="CLOUD" :item-classes="`justify-between`">
                 <template #content>
-                    <p class="text-[--primary-text-color] text-3xl font-semibold"> {{ homeCurrentLocationData.current.cloud }} %</p>
+                    <p class="text-[--primary-text-color] text-3xl font-semibold"> {{ homeCurrentData.current.cloud }}%</p>
                 </template>
 
                 <template #footer>
-                    <p class="text-[--primary-text-color] text-md font-semibold">Wind dir: {{ homeCurrentLocationData.current.wind_dir }}</p>
+                    <p class="text-[--primary-text-color] text-md font-semibold">Wind dir: {{ homeCurrentData.current.wind_dir }}</p>
                 </template>
             </HotbarItem>
             
@@ -214,13 +214,13 @@
                 </template>
 
                 <template #footer>
-                    <p class="text-[--primary-text-color] text-md font-semibold">Based on actual temperature</p>
+                    <p class="text-[--primary-text-color] text-sm font-semibold">Based on actual temperature</p>
                 </template>
             </HotbarItem>
             
             <HotbarItem :icon-classes="`fa-solid fa-temperature-low`" title="HUMIDITY" :item-classes="`justify-between`">
                 <template #content>
-                    <p class="text-[--primary-text-color] text-3xl font-semibold">{{ homeCurrentLocationData.current.feelslike_c }}%</p>
+                    <p class="text-[--primary-text-color] text-3xl font-semibold">{{ homeCurrentData.current.feelslike_c }}%</p>
                 </template>
 
                 <template #footer>
@@ -231,7 +231,7 @@
             <HotbarItem :icon-classes="`fa-solid fa-eye`" title="VISIBILITY" :item-classes="`justify-between`">
                 <template #content>
                     <div class="flex items-end gap-1 pb-5">
-                        <p class="text-[--primary-text-color] text-[2rem] font-semibold">{{ homeCurrentLocationData.current.vis_km }}</p>
+                        <p class="text-[--primary-text-color] text-[2rem] font-semibold">{{ homeCurrentData.current.vis_km }}</p>
                         <p class="text-[--primary-text-color] text-xl font-semibold">/kph</p>
                     </div>
                 </template>

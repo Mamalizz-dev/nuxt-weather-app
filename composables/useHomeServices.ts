@@ -19,7 +19,7 @@ export const useHomeService = () => {
 // computed
 
     const homeCurrentData = computed(() => store.getCurrentData)
-    const homeforecastData = computed(() => store.getCurrentData)
+    const homeforecastData = computed(() => store.getForecastData)
 
 
 

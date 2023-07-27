@@ -8,18 +8,19 @@
 // state
 
     const { width: windowWidth, height: windowHeight } = useWindowSize()
-    const { homeCurrentLocationData, setHomeCurrentLocationData } = useHomeService()
+    const { homeCurrentData, setHomeCurrentData, homeforecastData, setHomeForecastData } = useHomeService()
 
 // methods
 
-    // const { data : currentData , pending } = await useLazyFetch<any>('/api/current?location=shiraz')
+    // const { data : currentData , pending: currentPending } = await useLazyFetch<any>('/api/current?location=shiraz')
     // if(!!currentData.value){
-    //     setHomeCurrentLocationData(currentData.value)
+    //     setHomeCurrentData(currentData.value)
     // }
-    const { data : currentData , pending } = await useLazyFetch<any>('/api/forecast?location=shiraz')
-    if(!!currentData.value){
-        setHomeCurrentLocationData(currentData.value)
-    }
+
+    // const { data : forecastData , pending: forecastPending } = await useLazyFetch<any>('/api/forecast?location=shiraz')
+    // if(!!forecastData.value){
+    //     setHomeForecastData(forecastData.value)
+    // }
 
 </script>
 
@@ -36,15 +37,15 @@
     <div class="flex flex-col items-center absolute inset-0 top-[15%] degree">
         <h1 class="text-[2rem] text-white items-center flex gap-2">
             <i class="fa-solid fa-location-dot"></i>
-            {{ homeCurrentLocationData.location.name ?? 'Undefined' }}
-            <p class="pt-4 text-sm">/ {{ homeCurrentLocationData.location.region }}</p>
+            {{ homeCurrentData.location.name ?? 'Undefined' }}
+            <p class="pt-4 text-sm">/ {{ homeCurrentData.location.region }}</p>
         </h1>
         <h2 class="text-[5rem] text-white pl-6">
-            {{ homeCurrentLocationData.current.temp_c ?? 0 }}°
+            {{ homeCurrentData.current.temp_c ?? 0 }}°
         </h2>
         <div class="flex">  
             <p class="text-sm text-white">
-                Last Update : {{ homeCurrentLocationData.current.last_updated ?? `--:--:--` }}
+                Last Update : {{ homeCurrentData.current.last_updated ?? `--:--:--` }}
             </p>
         </div>
     </div>
