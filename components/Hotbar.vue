@@ -1,14 +1,17 @@
 <script setup lang="ts">
 
+// import
+
     import Slider from "vue3-slider"
+
+// state
 
     const { width: windowWidth, height: windowHeight } = useWindowSize()
     const toggleSlide = ref<boolean>(false)
     const touchStartPosition = ref<any>(null)
     const touchCurrentPosition = ref<any>(0)
-    const nu = ref<any>(40)
-    const hotbarStatus = ref<string>('middle')
     const hotbar = ref<HTMLDivElement | null>(null)
+    const hotbarPosition = ref<string>('middle')
 
     const toggleMove = (event: any) => {
         toggleSlide.value = !toggleSlide.value
@@ -21,11 +24,11 @@
             touchCurrentPosition.value = windowHeight.value - event.touches[0].clientY;
             const touchDelta = touchCurrentPosition.value - touchStartPosition.value;
             if (touchCurrentPosition.value > windowHeight.value / 1.5) {
-                hotbarStatus.value = 'top';
+                hotbarPosition.value = 'top';
             } else if (touchCurrentPosition.value >= windowHeight.value / 1.5 - 150) {
-                hotbarStatus.value = 'middle';
+                hotbarPosition.value = 'middle';
             } else {
-                hotbarStatus.value = 'bottom';
+                hotbarPosition.value = 'bottom';
             }
 
             // toggleSlide.value = touchDelta > 50; // Adjust this threshold as needed 
@@ -42,9 +45,9 @@
         if (toggleSlide.value){
             return `${touchCurrentPosition.value}px`
         } else {
-            if (hotbarStatus.value == 'top'){
+            if (hotbarPosition.value == 'top'){
                 return `${windowHeight.value - 20}px`
-            } else if (hotbarStatus.value == 'middle') {
+            } else if (hotbarPosition.value == 'middle') {
                 return `${windowHeight.value / 2 - 60}px`
             } else {
                 return `8rem`
@@ -52,7 +55,7 @@
         }
     })
 
-    watch([hotbarHeightStyle, hotbarStatus], ([hotbarHeight, status]) => {
+    watch([hotbarHeightStyle, hotbarPosition], ([hotbarHeight, status]) => {
         const locationDegrees: HTMLDivElement | null = document.querySelector('.degree')!;
         const locationDetails: HTMLDivElement | null = document.querySelector('.hotbar-details')!;
         const hotbarElement: HTMLDivElement | null = hotbar.value;

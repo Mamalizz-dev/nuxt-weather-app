@@ -1,7 +1,7 @@
 import { ApiTypes } from '~/types/types'
 
 export default defineEventHandler(async(event: any) => {
-    
+        
     const { location } = getQuery(event)
 
     const { BASE_URL, API_KEY } = useRuntimeConfig()

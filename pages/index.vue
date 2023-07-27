@@ -1,10 +1,22 @@
 <script setup lang="ts">
-    document.documentElement.style.overflow = 'hidden'
 
-    import { useUserLocation } from '~~/composibles/useUserLocation'
+// import
+
+    import { useUserLocation } from '~/composables/useUserLocation'
+    import { useHomeService } from '~/composables/useHomeServices'
+    import { useCurrentStore } from '~/stores'
+
+// state
 
     const { width: windowWidth, height: windowHeight } = useWindowSize()
-    
+    const { homeCurrentLocationData, setHomeCurrentLocationData } = useHomeService()
+
+// methods
+
+    const { data : currentData , pending } = await useLazyFetch<any>('/api/current?location=shiraz')
+    if(!!currentData.value){
+        setHomeCurrentLocationData(currentData.value)
+    }
 
 </script>
 
@@ -19,19 +31,17 @@
     </div>
 
     <div class="flex flex-col items-center absolute inset-0 top-[15%] degree">
-        <h1 class="text-[2rem] text-white">
+        <h1 class="text-[2rem] text-white items-center flex gap-2">
             <i class="fa-solid fa-location-dot"></i>
-            Shiraz
+            {{ homeCurrentLocationData.location.name ?? 'Undefined' }}
+            <p class="pt-4 text-sm">/ {{ homeCurrentLocationData.location.region }}</p>
         </h1>
         <h2 class="text-[5rem] text-white pl-6">
-            64°
+            {{ homeCurrentLocationData.current.temp_c ?? 0 }}°
         </h2>
-        <div class="flex gap-x-5">  
+        <div class="flex">  
             <p class="text-sm text-white">
-                H:34deg
-            </p>
-            <p class="text-sm text-white">
-                L:34deg
+                Last Update : {{ homeCurrentLocationData.current.last_updated ?? `--:--:--` }}
             </p>
         </div>
     </div>
@@ -63,4 +73,4 @@
   transition: opacity 0.3s ease-out; /* Adjust the duration and easing as needed */
   opacity: 1; /* Initially set the opacity to 1 */
 }
-</style>
+</style>../stores/main../composables/useUserLocation../composables/useHomeServices
