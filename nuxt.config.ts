@@ -9,6 +9,9 @@ export default defineNuxtConfig({
           src: 'https://cdn.lordicon.com/bhenfmcm.js',
         },
       ],
+      meta: [
+        { name: 'theme-color', content: '#000000' }
+      ]
     }
   },
   alias : {

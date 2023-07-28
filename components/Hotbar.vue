@@ -28,7 +28,7 @@
             if (hotbarPosition.value == 'top'){
                 return `${windowHeight.value - 20}px`
             } else if (hotbarPosition.value == 'middle') {
-                return `${windowHeight.value / 2 - 40}px`
+                return `${windowHeight.value / 2 + 25}px`
             } else {
                 return `8rem`
             }
