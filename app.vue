@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="app">
     <NuxtLayout>
       <ClientOnly>
         <NuxtPage></NuxtPage>
@@ -7,3 +7,10 @@
     </NuxtLayout>
   </div>
 </template>
+
+
+<style>
+#app {
+  overscroll-behavior: none !important;
+}
+</style>

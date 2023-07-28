@@ -36,6 +36,7 @@
     transform: scale(100%) !important;
     transform: translateY(-1.5px) !important;
     border-radius: 50% !important;
+    margin-top: 0px !important;
 }
 
 .range-progress > .vue3-slider.circular > .handle-container:nth-child(2) > .handle {

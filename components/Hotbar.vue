@@ -4,7 +4,9 @@
 
     import Slider from "vue3-slider"
     import { useHomeService } from '~/composables/useHomeServices'
-    import { useAirQuality } from '~/utils/useAirQuality'
+    import { useAirQuality } from '~/composables/useAirQuality'
+    const { $gsap: gsap, $Draggable: Draggable } = useNuxtApp();
+
 
 // state
 
@@ -17,7 +19,6 @@
     
     const { homeCurrentData, homeforecastData } = useHomeService()
 
-
 // computed
 
     const hotbarHeightStyle = computed(() => {
@@ -27,7 +28,7 @@
             if (hotbarPosition.value == 'top'){
                 return `${windowHeight.value - 20}px`
             } else if (hotbarPosition.value == 'middle') {
-                return `${windowHeight.value / 2 - 60}px`
+                return `${windowHeight.value / 2 - 40}px`
             } else {
                 return `8rem`
             }
@@ -114,8 +115,24 @@
             locationDegrees.style.opacity = degreesOpacity.toString();
             locationDetails.style.opacity = detailsOpacity.toString();
         }
+
+        if (status === 'bottom') {
+            gsap?.to(locationDegrees, { scale: 1.05, duration: 0.5 });
+        } else {
+            gsap?.to(locationDegrees, { scale: 1, duration: 0.5 });
+        }
     });
 
+
+// onMounted
+
+    onMounted(() => {
+        const timeline = gsap.timeline({defaults: {duration: 1}});
+        timeline
+            .fromTo('.degree', { opacity: 0, blur: 1, scale:.95 }, { opacity: 1, blur: 0, scale: 1 })
+            .fromTo('.hotbar', { y: '100%' }, { y: '0%', ease: 'Bounce.easeOut'})
+            .from('.hourly' , { opacity: 0, stagger: 0.1})
+    })
 
 </script>
 
@@ -131,15 +148,15 @@
         </div>  
 
         <div class="flex justify-between w-full px-8 py-2">
-            <button class="text-sm text-white">
+            <button class="text-white text-md">
                 Hourly Forecast
             </button>
-            <button class="text-sm text-white">
+            <!-- <button class="text-sm text-white">
                 Weekly Forecast
-            </button>
+            </button> -->
         </div>
 
-        <div class="flex w-full gap-5 px-5 py-4 mt-3 overflow-scroll">
+        <div class="flex w-full gap-5 px-5 py-4 overflow-scroll">
             <div v-for="(hour, index) in homeforecastData.forecast.forecastday[0].hour" :key="`day-${index}`" class="w-[4.8rem] shrink-0 min-h-[10rem] rounded-full hotbar-item hourly flex flex-col items-center justify-between px-3 py-5">
                 <p class="text-white text-md">{{ (hour.time).split(' ').pop() }}</p>
                 <!-- <i class="text-white scale-150 fa-solid fa-cloud-showers-heavy"></i> -->
@@ -148,7 +165,7 @@
             </div>
         </div>
 
-        <div class="grid w-full grid-cols-2 gap-5 px-5 py-2 overflow-scroll h-[28rem] pb-[20%] hotbar-details transition-all">
+        <div class="grid w-full grid-cols-2 gap-5 px-5 py-2 overflow-scroll h-[28rem] pb-[20%] hotbar-details opacity-0 transition-all">
 
             <HotbarItem :icon-classes="`fa-solid fa-heart-pulse`" title="AIR QULITY" :item-classes="`col-span-full justify-between`" >
             
@@ -265,7 +282,7 @@
 }
 
 .hotbar-item {
-    background: rgba(170, 37, 201, 0.2);
+    background: #aa25c933;
     box-shadow: 0 1px 10px 0 rgba(109, 31, 135, 1);
     backdrop-filter: blur(8.5px);
     -webkit-backdrop-filter: blur(8px);
@@ -280,7 +297,6 @@
 
 .hotbar-details {
   transition: opacity 0.3s ease-out; /* Adjust the duration and easing as needed */
-  opacity: 1; /* Initially set the opacity to 1 */
 }
 
 .edge {

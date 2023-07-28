@@ -8,13 +8,13 @@
     --tertiary-text-color: #EBEBF5;
 
 
-    --primary-gradient : linear-gradient(68deg, rgba(46,51,90,1) 0%, rgba(28,27,51,1) 100%);
-    --secondary-gradient : linear-gradient(68deg, rgba(89,54,180,1) 0%, rgba(54,42,132,1) 100%);
+    --primary-gradient : linear-gradient(68deg, #2e335a 0%, #1c1b33 100%);
+    --secondary-gradient : linear-gradient(68deg, #5936b4 0%, #362a84 100%);
     --gradient-angle: 360deg
 
     --light-shadow : #48319D;
     --dark-shadow : #1F1D47;
 
-    --range-background-color : linear-gradient(68deg, rgba(54,89,177,1) 0%, rgba(176,88,228,1) 50%, rgba(230,68,151,1) 100%);
+    --range-background-color : linear-gradient(68deg, #3659b1 0%, #b058e4 50%, #e64497 100%);
     
 }

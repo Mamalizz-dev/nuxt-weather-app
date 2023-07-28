@@ -1,15 +1,15 @@
 <script setup lang="ts">
 
 // import
-
+    document.documentElement.style.overflow = 'hidden'
     import { useUserLocation } from '~/composables/useUserLocation'
     import { useHomeService } from '~/composables/useHomeServices'
-    const { $gsap: gsap, $Draggable: Draggable } = useNuxtApp();
 
 // state
-
+    
     const { width: windowWidth, height: windowHeight } = useWindowSize()
     const { homeCurrentData, setHomeCurrentData, homeforecastData, setHomeForecastData } = useHomeService()
+    
 
 // methods
 
@@ -22,14 +22,6 @@
     // if(!!forecastData.value){
     //     setHomeForecastData(forecastData.value)
     // }
-
-// onMounted
-
-    onMounted(() => {
-        const timeline = gsap.timeline({defaults: {duration: 2}});
-        timeline
-            .fromTo('.degree', { opacity: 0 }, { opacity: 1 })
-    })
 
 </script>
 
@@ -72,22 +64,33 @@
     <client-only>
         <Hotbar />
     </client-only>
-<!-- 
-    <div class="fixed bottom-0 flex justify-between w-full h-20 px-10 hotbar-buttons rounded-t-xl">
+
+    <div class="fixed bottom-0 flex justify-between w-full h-20 px-10 bg-black hotbar-buttons rounded-t-xl">
         <div class="flex items-center justify-start w-1/3">
-            <i class="text-white scale-125 fa-solid fa-location-dot"></i>
+            <lord-icon
+                src="https://cdn.lordicon.com/elzslyvl.json"
+                trigger="hover"
+                colors="primary:#4be1ec,secondary:#cb5eee"
+                style="width:45px;height:45px;">
+            </lord-icon>
         </div>
 
-        <div class="flex justify-center w-1/3">
-            <div class="flex items-center justify-center w-32 h-32 pb-10 bg-white rounded-t-full shadow-md shadow-white">
+        <div class="flex justify-center w-1/3 pt-2.5">
+            <div class="flex items-center justify-center transition-all rounded-t-full shadow-md pb-11 w-28 h-28 addbtn hover:scale-105">
                 <i class="text-black scale-150 fa-solid fa-plus"></i>
             </div>
         </div>
 
         <div class="flex items-center justify-end w-1/3 h-full">
-            <i class="text-white scale-125 fa-solid fa-ellipsis-vertical"></i>
+            <lord-icon
+                src="https://cdn.lordicon.com/dfxesbyu.json"
+                trigger="hover"
+                colors="primary:#4be1ec,secondary:#cb5eee"
+                state="hover-2"
+                style="width:40px;height:40px">
+            </lord-icon>
         </div>
-    </div>   -->
+    </div>  
 </template>
 
 
@@ -95,5 +98,11 @@
 .degree {
   transition: opacity 0.3s ease-out; /* Adjust the duration and easing as needed */
   opacity: 1; /* Initially set the opacity to 1 */
+}
+
+.addbtn{
+    background: linear-gradient(234deg, rgba(137,78,160,1) 0%, rgba(89,41,103,1) 68%, rgba(45,18,56,1) 100%);
+    box-shadow: 1px -1px 20px 0px rgba(137,78,160,1)
+
 }
 </style>

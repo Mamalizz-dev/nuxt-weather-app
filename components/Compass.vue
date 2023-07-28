@@ -12,6 +12,11 @@
         return `transform: rotate(${props.windAngle}deg)`
     })
 
+    const letterAngle = (letter: string) => {
+        const reverseAngle = 360 - props.windAngle;
+        return `transform: rotate(${reverseAngle}deg);`;
+    };
+
 </script>
 
 
@@ -23,22 +28,22 @@
         >
             <div class="absolute inset-x-0 -top-6">
                 <div class="flex flex-col items-center">
-                    <p class="text-sm text-white">N</p>
+                    <p class="text-sm text-white" :style="letterAngle('N')">N</p>
                 </div>
             </div>
             <div class="absolute top-[50%] -translate-y-1/2 -right-4">
                 <div class="flex items-center">
-                    <p class="text-sm text-white">E</p>
+                    <p class="text-sm text-white" :style="letterAngle('E')">E</p>
                 </div>
             </div>
             <div class="absolute inset-x-0 -bottom-6">
                 <div class="flex flex-col items-center">
-                    <p class="text-sm text-white">S</p>
+                    <p class="text-sm text-white" :style="letterAngle('S')">S</p>
                 </div>
             </div>
             <div class="absolute top-[50%] -translate-y-1/2 -left-5">
                 <div class="flex items-center">
-                    <p class="text-sm text-white">W</p>
+                    <p class="text-sm text-white" :style="letterAngle('W')">W</p>
                 </div>
             </div>
         </div>
