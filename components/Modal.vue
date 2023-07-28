@@ -37,9 +37,11 @@
           >
                <div
                     @click.stop
-                    class="modal flex flex-col overflow-visible items-center justify-center w-11/12 gap-4 relative px-10 py-14 md:w-[30rem] shrink-0 rounded-[2.188rem] shadow-md animate__animated animate__fadeInDown"
+                    class="modal relative flex flex-col min-h-[50vh] max-h-[75vh] overflow-scroll items-center justify-center w-11/12 gap-4 px-6 pt-16 pb-14 md:w-[30rem] shrink-0 rounded-[2.188rem] shadow-md animate__animated animate__fadeInDown"
                >
-
+                    <button  class="flex justify-end w-full h-12 pr-2" @click="closeToastModal">
+                        <i class="text-lg text-white fa-solid fa-xmark"></i>
+                    </button>
                     <slot />
                </div>
           </div>

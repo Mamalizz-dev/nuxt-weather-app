@@ -68,12 +68,12 @@
 
     <div class="fixed bottom-0 flex justify-between w-full h-20 px-10 bg-black hotbar-buttons rounded-t-xl">
         <div class="flex items-center justify-start w-1/3">
-            <!-- <lord-icon
+            <lord-icon
                 src="https://cdn.lordicon.com/elzslyvl.json"
                 trigger="hover"
                 colors="primary:#4be1ec,secondary:#cb5eee"
                 style="width:45px;height:45px;">
-            </lord-icon> -->
+            </lord-icon>
         </div>
 
         <div class="flex justify-center w-1/3 pt-2.5">
@@ -83,16 +83,17 @@
         </div>
 
         <div class="flex items-center justify-end w-1/3 h-full">
-            <!-- <lord-icon
-                src="https://cdn.lordicon.com/dfxesbyu.json"
-                trigger="hover"
-                colors="primary:#4be1ec,secondary:#cb5eee"
-                state="hover-2"
-                style="width:40px;height:40px">
-            </lord-icon> -->
+            <button>    
+                <lord-icon
+                    src="https://cdn.lordicon.com/dfxesbyu.json"
+                    trigger="hover"
+                    colors="primary:#4be1ec,secondary:#cb5eee"
+                    state="hover-2"
+                    style="width:40px;height:40px">
+                </lord-icon>
+            </button>
         </div>
     </div>  
-    
 </template>
 
 
