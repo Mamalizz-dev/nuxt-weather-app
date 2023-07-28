@@ -1,39 +1,33 @@
-<script lang="ts">
+<script setup lang="ts">
 
-export default defineComponent({
-     
-  props: {
-     modelValue: {
-          type: Boolean,
+// emits
+
+    const emit = defineEmits(["update:modelValue" , 'closeModal'])
+
+// props
+
+    const props = defineProps({
+        modelValue: {
           default: false,
-     },
-     closeOnBlur: {
-          type: Boolean,
-          default: true
-     }
-  },
+        },
+        closeOnBlur: {
+            type: Boolean,
+            default: true
+        }
+    })
 
-  emits: ["update:modelValue" , 'closeModal'],
 
-  setup(props, { emit }) {
-     const { modelValue } = toRefs(props);
-
-     const closeToastModal = () => {
-          emit('update:modelValue', false)
-          emit('closeModal')
-     }
-
-     return {
-          modelValue,
-          closeToastModal,
-     };
-  },
-});
+// methods
+    const closeToastModal = () => {
+        emit('update:modelValue', false)
+        emit('closeModal')
+    }
+    
 </script>
 
 <template>
      <div
-          class="fixed inset-0 bg-[#0000009e] animate__animated animate__fadeIn duration-75 select-none"
+          class="fixed inset-0 bg-[#000000d0] animate__animated animate__fadeIn duration-75 select-none"
           style="z-index: 99999999999 !important"
           @click="closeOnBlur ? closeToastModal() : null"
      >
@@ -43,7 +37,7 @@ export default defineComponent({
           >
                <div
                     @click.stop
-                    class="flex flex-col overflow-visible items-center justify-center w-11/12 gap-4 relative px-10 py-14 md:w-[30rem] bg-white shrink-0 rounded-[2.188rem] shadow-md animate__animated animate__fadeInDown"
+                    class="modal flex flex-col overflow-visible items-center justify-center w-11/12 gap-4 relative px-10 py-14 md:w-[30rem] shrink-0 rounded-[2.188rem] shadow-md animate__animated animate__fadeInDown"
                >
 
                     <slot />
@@ -51,3 +45,15 @@ export default defineComponent({
           </div>
      </div>
 </template>
+
+<style>
+
+.modal {
+    background: #aa25c933;
+    box-shadow: 0 1px 10px 0 rgba(109, 31, 135, 1);
+    backdrop-filter: blur(8.5px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 2px solid rgba(255, 255, 255, .3);
+}
+
+</style>

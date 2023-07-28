@@ -25,7 +25,7 @@ export default defineNuxtConfig({
   piniaPersistedstate: {
     storage: 'sessionStorage'
   },
-  css: ['~/assets/css/tailwind.css', '~/assets/css/style.css'],
+  css: ['~/assets/css/tailwind.css', '~/assets/css/style.css', 'animate.css/animate.min.css'],
 
   postcss: {
     plugins: {

@@ -5,17 +5,23 @@
     import Slider from "vue3-slider"
     import { useHomeService } from '~/composables/useHomeServices'
     import { useAirQuality } from '~/composables/useAirQuality'
-    const { $gsap: gsap, $Draggable: Draggable } = useNuxtApp();
+    
+    
+// emit
 
+    const emit = defineEmits(['openModal'])
 
 // state
-
+    
+    const { $gsap: gsap, $Draggable: Draggable } = useNuxtApp();
     const { width: windowWidth, height: windowHeight } = useWindowSize()
     const toggleSlide = ref<boolean>(false)
     const touchStartPosition = ref<any>(null)
     const touchCurrentPosition = ref<any>(0)
     const hotbar = ref<HTMLDivElement | null>(null)
     const hotbarPosition = ref<string>('middle')
+    const airQualityModalIsShow = ref<boolean>(false)
+
     
     const { homeCurrentData, homeforecastData } = useHomeService()
 
@@ -178,10 +184,12 @@
 
 
                 <template #footer>
-                    <p class="text-[--secondary-text-color] text-lg font-semibold">See more</p>
-                    <i class="fa-solid fa-angle-right text-[--secondary-text-color] text-xl pt-1"></i>
+                    <button class="flex items-center justify-between w-full h-10" @click="emit('openModal')">
+                        <p class="text-[--secondary-text-color] text-lg font-semibold">See more</p>
+                        <i class="fa-solid fa-angle-right text-[--secondary-text-color] text-xl pt-1"></i>
+                    </button>
                 </template>
-               
+                
             </HotbarItem>
 
             <HotbarItem :icon-classes="`fa-solid fa-glasses`" title="UV INDEX">
