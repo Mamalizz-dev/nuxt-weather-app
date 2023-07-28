@@ -140,7 +140,7 @@
         </div>
 
         <div class="flex w-full gap-5 px-5 py-4 mt-3 overflow-scroll">
-            <div v-for="(hour, index) in homeforecastData.forecast.forecastday[0].hour" :key="`day-${index}`" class="w-[4.8rem] shrink-0 min-h-[10rem] rounded-full hotbar-item flex flex-col items-center justify-between px-3 py-5">
+            <div v-for="(hour, index) in homeforecastData.forecast.forecastday[0].hour" :key="`day-${index}`" class="w-[4.8rem] shrink-0 min-h-[10rem] rounded-full hotbar-item hourly flex flex-col items-center justify-between px-3 py-5">
                 <p class="text-white text-md">{{ (hour.time).split(' ').pop() }}</p>
                 <!-- <i class="text-white scale-150 fa-solid fa-cloud-showers-heavy"></i> -->
                 <img :src="hour.condition.icon" class="w-full scale-150" :alt="hour.condition.text">

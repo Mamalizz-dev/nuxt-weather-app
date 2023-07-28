@@ -4,6 +4,7 @@
 
     import { useUserLocation } from '~/composables/useUserLocation'
     import { useHomeService } from '~/composables/useHomeServices'
+    const { $gsap: gsap, $Draggable: Draggable } = useNuxtApp();
 
 // state
 
@@ -22,6 +23,14 @@
     //     setHomeForecastData(forecastData.value)
     // }
 
+// onMounted
+
+    onMounted(() => {
+        const timeline = gsap.timeline({defaults: {duration: 2}});
+        timeline
+            .fromTo('.degree', { opacity: 0 }, { opacity: 1 })
+    })
+
 </script>
 
 <template>
@@ -36,7 +45,7 @@
 
     <div class="flex flex-col items-center absolute inset-0 top-[15%] degree">
         <h1 class="text-[2.5rem] text-white items-center flex gap-2">
-            <i class="fa-solid fa-location-dot"></i>
+            <i class="text-[2rem] fa-solid fa-location-dot"></i>
             {{ homeCurrentData.location.name ?? 'Undefined' }}
             <p class="pt-4 text-sm">/ {{ homeCurrentData.location.region }}</p>
         </h1>
