@@ -1,5 +1,6 @@
 * {
     scrollbar-width: none; /* Hide scrollbar on Firefox */
+    letter-spacing: .5px;
 }
 
 /* Hide scrollbar on webkit-based browsers */

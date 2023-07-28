@@ -10,9 +10,15 @@
     const { width: windowWidth, height: windowHeight } = useWindowSize()
     const { homeCurrentData, setHomeCurrentData, homeforecastData, setHomeForecastData } = useHomeService()
     const { $gsap: gsap, $Draggable: Draggable } = useNuxtApp();
+    const searchModalIsShow = ref<boolean>(false)
+    const searchQuery = ref<string>('')
     
 
 // methods
+
+    const openSearchModal = () => {
+        searchModalIsShow.value = true
+    }
 
     // const { data : currentData , pending: currentPending } = await useLazyFetch<any>('/api/current?location=shiraz')
     // if(!!currentData.value){
@@ -83,7 +89,7 @@
         </div>
 
         <div class="flex items-center justify-end w-1/3 h-full">
-            <button>    
+            <button @click="openSearchModal">    
                 <lord-icon
                     src="https://cdn.lordicon.com/dfxesbyu.json"
                     trigger="hover"
@@ -94,6 +100,12 @@
             </button>
         </div>
     </div>  
+
+    <Modal v-if="searchModalIsShow" v-model="searchModalIsShow" >
+
+        <input type="text" v-model="searchQuery" class="search-input">
+
+    </Modal>
 </template>
 
 
@@ -106,6 +118,9 @@
 .addbtn{
     background: linear-gradient(234deg, rgba(137,78,160,1) 0%, rgba(89,41,103,1) 68%, rgba(45,18,56,1) 100%);
     box-shadow: 1px -1px 20px 0px rgba(137,78,160,1)
+}
 
+.search-input {
+    @apply ring-2 ring-offset-2 ring-[rgba(137,78,160,1)] bg-transparent w-full px-3 py-3 rounded-xl outline-none text-white text-lg tracking-[1.5px]
 }
 </style>
