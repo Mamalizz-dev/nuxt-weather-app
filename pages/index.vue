@@ -13,26 +13,27 @@ import { useCallApi } from '~/api/useCallApi'
     const { $gsap: gsap, $Draggable: Draggable } = useNuxtApp();
 
     //@ts-ignore
-    const { getCurrentDataFromApi, getForecastDataFromApi, currentLoading, forecastLoading } = useCallApi()
+    const { getCurrentDataFromApi, getForecastDataFromApi, currentLoading, forecastLoading, getSearchDataFromApi , searchLoading } = useCallApi()
     const { getUserLocation } = useUserLocation()
     const { homeCurrentData, homeforecastData, homeSearchData } = useHomeService()
     
     const searchModalIsShow = ref<boolean>(false)
     const searchQuery = ref<string>('')
+    const debouncedearchQuery = refDebounced(searchQuery, 700)
     
     onMounted(() => {
-
         const timeline = gsap.timeline({defaults: {duration: 1}});
 
-        getUserLocation().then((cityName) => {
-            getCurrentDataFromApi(cityName).then(() => {
-                timeline.fromTo('.degree', { opacity: 0, blur: 1, scale:.95 }, { opacity: 1, blur: 0, scale: 1, duration: 1 })
-            })
-            getForecastDataFromApi(cityName).then(() => {
-                timeline.fromTo('.hotbar', { y: '100%' }, { y: '0%', ease: 'Bounce.easeOut', duration: 1})
-                timeline.from('.hourly' , { opacity: 0, stagger: 0.2,  duration: 1})
-            })
-        })
+        // getUserLocation().then((cityName) => {
+        //     getCurrentDataFromApi(cityName).then(() => {
+        //         timeline.fromTo('.degree', { opacity: 0, blur: 1, scale:.95 }, { opacity: 1, blur: 0, scale: 1, duration: 1 })
+        //     }).then(() => {
+        //         getForecastDataFromApi(cityName).then(() => {
+        //             timeline.fromTo('.hotbar', { y: '100%' }, { y: '0%', ease: 'Bounce.easeOut', duration: 1})
+        //             timeline.from('.hourly' , { opacity: 0, stagger: 0.2,  duration: 1})
+        //         })
+        //     })
+        // })
     })
 
 // methods
@@ -41,11 +42,11 @@ import { useCallApi } from '~/api/useCallApi'
         searchModalIsShow.value = true
     }
 
+// watch
 
-    // const { data : forecastData , pending: forecastPending } = await useLazyFetch<any>('/api/forecast?location=shiraz')
-    // if(!!forecastData.value){
-    //     setHomeForecastData(forecastData.value)
-    // }
+    watch(debouncedearchQuery, (newValue) => {
+        getSearchDataFromApi(newValue)
+    })
 
 </script>
 
