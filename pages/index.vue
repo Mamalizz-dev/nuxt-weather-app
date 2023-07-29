@@ -12,14 +12,16 @@
     const { homeCurrentData, setHomeCurrentData, homeforecastData, setHomeForecastData, homeSearchData, setHomeSearchData } = useHomeService()
     const { $gsap: gsap, $Draggable: Draggable } = useNuxtApp();
     const searchModalIsShow = ref<boolean>(false)
+    const currentPending = ref<boolean>(true)
     const searchQuery = ref<string>('')
     
     onMounted(() => {
         getUserLocation().then(async (cityName) => {
 
-            // const { data : currentData , pending: currentPending } = await useLazyFetch<any>(`http://api.weatherapi.com/v1/current.json?key=2b9d02bcfdf14c5d84a53749230201&q=shiraz&aqi=no`)
+            // const { data : currentData} = await useLazyFetch<any>(`http://api.weatherapi.com/v1/current.json?key=2b9d02bcfdf14c5d84a53749230201&q=shiraz&aqi=no`)
             // if(!!currentData.value){
             //     setHomeCurrentData(currentData.value)
+            //     currentPending.value = false
             // }
             
         })
@@ -51,17 +53,18 @@
         </div>
     </div>
 
-  
+    <div v-if="currentPending" class="flex flex-col items-center absolute inset-0 top-[15%]">
+        <Skeleton 
+            
+            v-for="(i, index) in 4"
+            :key="index"
+            :width="index == 0 ? `13rem` : index == 1 ? '5rem' : index == 2 ? '6.5rem' : index == 3 ? '10rem' : '10rem'" 
+            :height="index == 0 ? `3rem` : index == 1 ? '5rem' : index == 2 ? '2rem' : index == 3 ? '2rem' : '2rem'" 
+            :style="`border-radius: .5rem; margin: 10px 0px;`" 
+        />
+    </div>
 
-    <div class="flex flex-col items-center absolute inset-0 top-[15%] degree">
-
-        <!-- <Skeleton 
-            v-for=""
-
-            :width="`13rem`" 
-            :height="`4rem`" 
-            :style="`border-radius: 1rem`" 
-        /> -->
+    <div v-else class="flex flex-col items-center absolute inset-0 top-[15%] degree">
 
         <h1 class="text-[2.5rem] text-white items-center flex gap-2">
             <i class="text-[2rem] fa-solid fa-location-dot"></i>
@@ -84,12 +87,21 @@
         </div>
     </div>
     
-    <p class="absolute inset-0 flex justify-center text-sm text-white top-10 text-opacity-30">
+    <p class="absolute inset-0 flex justify-center text-sm text-white top-10 text-opacity-30"> 
         Last Update : {{ homeCurrentData.current.last_updated ?? `--:--:--` }}
     </p>
 
+
     <client-only>
-        <Hotbar @openModal="openModal" />
+        <div class="w-full">
+            <Skeleton 
+                v-if="currentPending"
+                :width="`100%`" 
+                :height="`8rem`" 
+                :style="`border-radius: 1rem;border-top-left-radius: 2.5rem; border-top-right-radius: 2.5rem; position: fixed; bottom: 0px`" 
+            />
+          <Hotbar v-else @openModal="openModal" />
+        </div>
     </client-only>
 
     <div class="fixed bottom-0 flex justify-between w-full h-20 px-10 bg-black hotbar-buttons rounded-t-xl">

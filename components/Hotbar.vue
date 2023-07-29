@@ -135,11 +135,11 @@
 // onMounted
 
     onMounted(() => {
-        const timeline = gsap.timeline({defaults: {duration: 1}});
-        timeline
-            .fromTo('.degree', { opacity: 0, blur: 1, scale:.95 }, { opacity: 1, blur: 0, scale: 1 })
-            .fromTo('.hotbar', { y: '100%' }, { y: '0%', ease: 'Bounce.easeOut'})
-            .from('.hourly' , { opacity: 0, stagger: 0.1})
+        // const timeline = gsap.timeline({defaults: {duration: 1}});
+        // timeline
+        //     .fromTo('.degree', { opacity: 0, blur: 1, scale:.95 }, { opacity: 1, blur: 0, scale: 1 })
+        //     .fromTo('.hotbar', { y: '100%' }, { y: '0%', ease: 'Bounce.easeOut'})
+        //     .from('.hourly' , { opacity: 0, stagger: 0.1})
     })
 
 
