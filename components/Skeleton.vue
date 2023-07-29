@@ -10,6 +10,8 @@
 
     const props = defineProps<Props>()
 
+    const {width, height, style } = toRefs(props)
+
 </script>
 
 <template>

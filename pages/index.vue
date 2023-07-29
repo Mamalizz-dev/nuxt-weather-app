@@ -1,29 +1,31 @@
 <script setup lang="ts">
 
 // import
-    document.documentElement.style.overflow = 'hidden'
-    import { useUserLocation } from '~/utils/useUserLocation'
-    import { useHomeService } from '~/composables/useHomeServices'
+import { useUserLocation } from '~/utils/useUserLocation'
+import { useHomeService } from '~/composables/useHomeServices'
+import { useCallApi } from '~/api/useCallApi'
 
 // state
 
+    document.documentElement.style.overflow = 'hidden'
+    
     const { width: windowWidth, height: windowHeight } = useWindowSize()
-    const { getUserLocation } = useUserLocation()
-    const { homeCurrentData, setHomeCurrentData, homeforecastData, setHomeForecastData, homeSearchData, setHomeSearchData } = useHomeService()
     const { $gsap: gsap, $Draggable: Draggable } = useNuxtApp();
+
+    //@ts-ignore
+    const { getCurrentDataFromApi, getForecastDataFromApi, currentLoading, forecastLoading } = useCallApi()
+    const { getUserLocation } = useUserLocation()
+    const { homeCurrentData, homeforecastData, homeSearchData } = useHomeService()
+    
     const searchModalIsShow = ref<boolean>(false)
-    const currentPending = ref<boolean>(true)
     const searchQuery = ref<string>('')
     
     onMounted(() => {
-        getUserLocation().then(async (cityName) => {
-
-            // const { data : currentData} = await useLazyFetch<any>(`http://api.weatherapi.com/v1/current.json?key=2b9d02bcfdf14c5d84a53749230201&q=shiraz&aqi=no`)
-            // if(!!currentData.value){
-            //     setHomeCurrentData(currentData.value)
-            //     currentPending.value = false
-            // }
-            
+        getUserLocation().then((cityName) => {
+            getCurrentDataFromApi(cityName).then(() => {
+                gsap.fromTo('.degree', { opacity: 0, blur: 1, scale:.95 }, { opacity: 1, blur: 0, scale: 1 })
+            })
+            // getForecastDataFromApi(cityName) => 
         })
     })
 
@@ -53,7 +55,7 @@
         </div>
     </div>
 
-    <div v-if="currentPending" class="flex flex-col items-center absolute inset-0 top-[15%]">
+    <div v-if="currentLoading" class="flex flex-col items-center absolute inset-0 top-[15%]">
         <Skeleton 
             
             v-for="(i, index) in 4"
@@ -93,15 +95,15 @@
 
 
     <client-only>
-        <div class="w-full">
+        <div v-if="currentLoading || forecastLoading" class="w-full">
             <Skeleton 
-                v-if="currentPending"
+                
                 :width="`100%`" 
                 :height="`8rem`" 
                 :style="`border-radius: 1rem;border-top-left-radius: 2.5rem; border-top-right-radius: 2.5rem; position: fixed; bottom: 0px`" 
             />
-          <Hotbar v-else @openModal="openModal" />
         </div>
+        <Hotbar v-else @openModal="openModal" />
     </client-only>
 
     <div class="fixed bottom-0 flex justify-between w-full h-20 px-10 bg-black hotbar-buttons rounded-t-xl">

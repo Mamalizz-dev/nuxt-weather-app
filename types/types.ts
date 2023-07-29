@@ -4,6 +4,12 @@ enum ApiTypes {
     Search = 'search.json',
 }
 
+interface StoreTypes {
+    current: any,
+    forecast: any,
+    search: any
+}
+
 export { 
-    ApiTypes
+    ApiTypes , StoreTypes
 }
