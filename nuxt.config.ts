@@ -25,7 +25,7 @@ export default defineNuxtConfig({
   piniaPersistedstate: {
     storage: 'sessionStorage'
   },
-  css: ['~/assets/css/tailwind.css', '~/assets/css/style.css', 'animate.css/animate.min.css'],
+  css: ['~/assets/css/tailwind.css', '~/assets/css/style.css', 'animate.css/animate.min.css', 'vue-skeletor/dist/vue-skeletor.css'],
 
   postcss: {
     plugins: {
@@ -36,7 +36,10 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     BASE_URL: process.env.NUXT_API_BASE_URL,
-    API_KEY : process.env.NUXT_API_KEY
+    API_KEY : process.env.NUXT_API_KEY,
+    public: {
+      OPEN_WEATHER_API_KEY : process.env.NUXT_OPEN_WEATHER_API_KEY
+    }
   }
   
 })

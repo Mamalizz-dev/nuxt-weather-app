@@ -28,7 +28,7 @@
 <template>
      <div
           class="fixed inset-0 bg-[#000000d0] animate__animated animate__fadeIn duration-75 select-none"
-          style="z-index: 99999999999 !important"
+          style="z-index: 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999 !important"
           @click="closeOnBlur ? closeToastModal() : null"
      >
           <div
@@ -37,10 +37,10 @@
           >
                <div
                     @click.stop
-                    class="modal relative flex flex-col min-h-[50vh] max-h-[75vh] overflow-scroll w-11/12 gap-4 px-6 py-10 md:w-[30rem] shrink-0 rounded-[2.188rem] shadow-md animate__animated animate__fadeInDown"
+                    class="modal relative flex flex-col min-h-[50vh] max-h-[75vh] overflow-scroll w-11/12 gap-4 px-6 pt-10 md:w-[30rem] shrink-0 rounded-[2.188rem] shadow-md animate__animated animate__fadeInDown"
                >
-                    <button  class="flex justify-end w-full h-12 pr-2" @click="closeToastModal">
-                        <i class="text-lg text-white fa-solid fa-xmark"></i>
+                    <button  class="flex justify-end w-full h-8 pr-2">
+                        <i class="text-lg text-white fa-solid fa-xmark" @click="closeToastModal"></i>
                     </button>
                     <slot />
                </div>

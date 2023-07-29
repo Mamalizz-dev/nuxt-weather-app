@@ -2,17 +2,28 @@
 
 // import
     document.documentElement.style.overflow = 'hidden'
-    import { useUserLocation } from '~/composables/useUserLocation'
+    import { useUserLocation } from '~/utils/useUserLocation'
     import { useHomeService } from '~/composables/useHomeServices'
 
 // state
 
     const { width: windowWidth, height: windowHeight } = useWindowSize()
-    const { homeCurrentData, setHomeCurrentData, homeforecastData, setHomeForecastData } = useHomeService()
+    const { getUserLocation } = useUserLocation()
+    const { homeCurrentData, setHomeCurrentData, homeforecastData, setHomeForecastData, homeSearchData, setHomeSearchData } = useHomeService()
     const { $gsap: gsap, $Draggable: Draggable } = useNuxtApp();
     const searchModalIsShow = ref<boolean>(false)
     const searchQuery = ref<string>('')
     
+    onMounted(() => {
+        getUserLocation().then(async (cityName) => {
+
+            // const { data : currentData , pending: currentPending } = await useLazyFetch<any>(`http://api.weatherapi.com/v1/current.json?key=2b9d02bcfdf14c5d84a53749230201&q=shiraz&aqi=no`)
+            // if(!!currentData.value){
+            //     setHomeCurrentData(currentData.value)
+            // }
+            
+        })
+    })
 
 // methods
 
@@ -20,10 +31,6 @@
         searchModalIsShow.value = true
     }
 
-    // const { data : currentData , pending: currentPending } = await useLazyFetch<any>('/api/current?location=shiraz')
-    // if(!!currentData.value){
-    //     setHomeCurrentData(currentData.value)
-    // }
 
     // const { data : forecastData , pending: forecastPending } = await useLazyFetch<any>('/api/forecast?location=shiraz')
     // if(!!forecastData.value){
@@ -33,6 +40,8 @@
 </script>
 
 <template>
+
+
     <div class="relative flex w-full h-full">
         <div 
             class="absolute inset-0 w-full h-full"
@@ -42,7 +51,18 @@
         </div>
     </div>
 
+  
+
     <div class="flex flex-col items-center absolute inset-0 top-[15%] degree">
+
+        <!-- <Skeleton 
+            v-for=""
+
+            :width="`13rem`" 
+            :height="`4rem`" 
+            :style="`border-radius: 1rem`" 
+        /> -->
+
         <h1 class="text-[2.5rem] text-white items-center flex gap-2">
             <i class="text-[2rem] fa-solid fa-location-dot"></i>
             {{ homeCurrentData.location.name ?? 'Undefined' }}
@@ -103,7 +123,18 @@
 
     <Modal v-if="searchModalIsShow" v-model="searchModalIsShow" >
 
-        <input type="text" v-model="searchQuery" class="search-input">
+        <div class="search-input">
+            <div class="w-11/12">
+                <input type="text" v-model="searchQuery" placeholder="Search Locations...">
+            </div>
+            <div class="w-1/12">
+                <i class="fa-solid fa-magnifying-glass text-[#ab25c9]"></i>
+            </div>
+        </div>
+
+        <div class="flex flex-col h-full gap-10 mt-3 overflow-scroll">
+            <SearchResultItem v-for="(data, index) in homeSearchData" :key="`data-${index}`" :data="data" />
+        </div>
 
     </Modal>
 </template>
@@ -121,6 +152,10 @@
 }
 
 .search-input {
-    @apply ring-2 ring-offset-2 ring-[rgba(137,78,160,1)] bg-transparent w-full px-3 py-3 rounded-xl outline-none text-white text-lg tracking-[1.5px]
+    @apply flex gap-5 items-center border-2 border-[rgba(137,78,160,1)] focus:ring-2 focus:ring-offset-2 transition-all focus:ring-offset-[trasnparent] ring-[rgba(137,78,160,1)] bg-transparent w-full px-3 py-4 rounded-xl outline-none text-white text-[1rem] tracking-[1px]
+}
+
+.search-input input {
+    @apply bg-transparent h-full w-full outline-none border-none
 }
 </style>

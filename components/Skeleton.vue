@@ -1,0 +1,21 @@
+<script setup lang="ts">
+
+    import { Skeletor as Skeleton } from 'vue-skeletor'
+
+    interface Props {
+        height: string | number | undefined
+        width: string | number | undefined
+        style: string
+    }
+
+    const props = defineProps<Props>()
+
+</script>
+
+<template>
+    <Skeleton 
+        :height="`${height}`" 
+        :width="`${width}`" 
+        :style="`${style}`" 
+    />
+</template>

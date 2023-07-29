@@ -1085,12 +1085,42 @@ export const useStore = defineStore('Store', {
                     }
                 ]
             }
-        }
+        },
+        search : [
+            {
+                "id": 1188584,
+                "name": "Farsan",
+                "region": "Chahar Mahall va Bakhtiari",
+                "country": "Iran",
+                "lat": 32.26,
+                "lon": 50.56,
+                "url": "farsan-chahar-mahall-va-bakhtiari-iran"
+            },
+            {
+                "id": 2859406,
+                "name": "Farsala",
+                "region": "Thessaly",
+                "country": "Greece",
+                "lat": 39.29,
+                "lon": 22.38,
+                "url": "farsala-thessaly-greece"
+            },
+            {
+                "id": 635618,
+                "name": "Farso",
+                "region": "Nordjylland",
+                "country": "Denmark",
+                "lat": 56.78,
+                "lon": 9.35,
+                "url": "farso-nordjylland-denmark"
+            }
+        ]
     }),
 
     getters: {
         getCurrentData: (state) => state.current,
-        getForecastData: (state) => state.forecast
+        getForecastData: (state) => state.forecast,
+        getSearchData: (state) => state.search
     },
 
     actions: {
@@ -1102,9 +1132,18 @@ export const useStore = defineStore('Store', {
                 console.log(error);
             }
         },
+        
         setForecastData(payload: any){
             try {
                 this.forecast = payload
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        setSearchData(payload: any){
+            try {
+                this.search = payload
             } catch (error) {
                 console.log(error);
             }
