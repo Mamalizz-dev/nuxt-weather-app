@@ -21,11 +21,17 @@ import { useCallApi } from '~/api/useCallApi'
     const searchQuery = ref<string>('')
     
     onMounted(() => {
+
+        const timeline = gsap.timeline({defaults: {duration: 1}});
+
         getUserLocation().then((cityName) => {
             getCurrentDataFromApi(cityName).then(() => {
-                gsap.fromTo('.degree', { opacity: 0, blur: 1, scale:.95 }, { opacity: 1, blur: 0, scale: 1 })
+                timeline.fromTo('.degree', { opacity: 0, blur: 1, scale:.95 }, { opacity: 1, blur: 0, scale: 1, duration: 1 })
             })
-            // getForecastDataFromApi(cityName) => 
+            getForecastDataFromApi(cityName).then(() => {
+                timeline.fromTo('.hotbar', { y: '100%' }, { y: '0%', ease: 'Bounce.easeOut', duration: 1})
+                timeline.from('.hourly' , { opacity: 0, stagger: 0.2,  duration: 1})
+            })
         })
     })
 
@@ -44,8 +50,7 @@ import { useCallApi } from '~/api/useCallApi'
 </script>
 
 <template>
-
-
+    
     <div class="relative flex w-full h-full">
         <div 
             class="absolute inset-0 w-full h-full"
@@ -66,7 +71,7 @@ import { useCallApi } from '~/api/useCallApi'
         />
     </div>
 
-    <div v-else class="flex flex-col items-center absolute inset-0 top-[15%] degree">
+    <div v-else class="flex flex-col items-center absolute w-full top-[15%] degree">
 
         <h1 class="text-[2.5rem] text-white items-center flex gap-2">
             <i class="text-[2rem] fa-solid fa-location-dot"></i>

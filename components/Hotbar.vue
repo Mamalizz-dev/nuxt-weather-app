@@ -150,13 +150,13 @@
 
 <template>
     <div class="fixed bottom-0 w-full hotbar rounded-t-[2.5rem] transition-all duration-200 ease-out" ref="hotbar" :style="{height: hotbarHeightStyle}">
-        <div class="flex items-center justify-center w-full h-10"
-            @touchstart.passive="toggleMove"
-            @touchmove.passive="onTouchMove"
-            @touchend.passive="onTouchEnd"
-        >
-            <div class="edge" />
-        </div>  
+            <div class="flex items-center justify-center w-full h-10"
+                @touchstart.passive="toggleMove"
+                @touchmove.passive="onTouchMove"
+                @touchend.passive="onTouchEnd"
+            >
+                <div class="edge" />
+            </div>  
 
         <div class="flex justify-between w-full px-8 py-2">
             <button class="text-white text-md">
