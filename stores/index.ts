@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 import { StoreTypes } from "~/types/types";
+import { useSessionStorage } from "@vueuse/core";
 
 export const useStore = defineStore('Store', {
     state: () => ({
-        current : {},
-        forecast : {},
-        search : []
+        current : useSessionStorage('current', {}),
+        forecast : useSessionStorage('forecast', {}),
+        search : useSessionStorage('search', [])
     } as StoreTypes ),
 
     getters: {
@@ -41,5 +42,5 @@ export const useStore = defineStore('Store', {
         }
     },
     
-    persist: true
+    persist: false
 })

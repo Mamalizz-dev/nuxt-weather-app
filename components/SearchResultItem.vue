@@ -14,7 +14,7 @@
     <div class="relative w-fullsearch-item">
         <div class="search-item-bg">
             <div class="flex flex-col w-1/2 h-full gap-1.5 pt-1">
-                <h1 class="text-[2rem] text-white text-clip">{{ data.name }}</h1>
+                <h1 class="text-[2rem] text-white text-clip line-clamp-1">{{ data.name }}</h1>
                 <div class="flex items-center gap-2 pl-1.5 text-white">
                     <p class="text-[.9rem] text-[#ab25c9]"> -- </p>
                     <h2 class="text-[1rem] line-clamp-1">{{ data.country }}</h2>

@@ -4,6 +4,7 @@
 import { useUserLocation } from '~/utils/useUserLocation'
 import { useHomeService } from '~/composables/useHomeServices'
 import { useCallApi } from '~/api/useCallApi'
+import Loading from 'vue-loading-overlay'
 
 // state
 
@@ -15,37 +16,38 @@ import { useCallApi } from '~/api/useCallApi'
     //@ts-ignore
     const { getCurrentDataFromApi, getForecastDataFromApi, currentLoading, forecastLoading, getSearchDataFromApi , searchLoading } = useCallApi()
     const { getUserLocation } = useUserLocation()
-    const { homeCurrentData, homeforecastData, homeSearchData } = useHomeService()
+    const { homeCurrentData, homeforecastData, homeSearchData, setHomeSearchData } = useHomeService()
     
     const searchModalIsShow = ref<boolean>(false)
+    const savedLocationsModalIsShow = ref<boolean>(false)
     const searchQuery = ref<string>('')
     const debouncedearchQuery = refDebounced(searchQuery, 700)
     
     onMounted(() => {
         const timeline = gsap.timeline({defaults: {duration: 1}});
 
-        // getUserLocation().then((cityName) => {
-        //     getCurrentDataFromApi(cityName).then(() => {
-        //         timeline.fromTo('.degree', { opacity: 0, blur: 1, scale:.95 }, { opacity: 1, blur: 0, scale: 1, duration: 1 })
-        //     }).then(() => {
-        //         getForecastDataFromApi(cityName).then(() => {
-        //             timeline.fromTo('.hotbar', { y: '100%' }, { y: '0%', ease: 'Bounce.easeOut', duration: 1})
-        //             timeline.from('.hourly' , { opacity: 0, stagger: 0.2,  duration: 1})
-        //         })
-        //     })
-        // })
+        getUserLocation().then((cityName) => {
+            getCurrentDataFromApi(cityName).then(() => {
+                timeline.fromTo('.degree', { opacity: 0, blur: 1, scale:.95 }, { opacity: 1, blur: 0, scale: 1, duration: 1 })
+            }).then(() => {
+                getForecastDataFromApi(cityName).then(() => {
+                    timeline.fromTo('.hotbar', { y: '100%' }, { y: '0%', ease: 'Bounce.easeOut', duration: 1})
+                    timeline.from('.hourly' , { opacity: 0, stagger: 0.2,  duration: 1})
+                })
+            })
+        })
     })
 
 // methods
 
-    const openSearchModal = () => {
-        searchModalIsShow.value = true
-    }
-
 // watch
 
     watch(debouncedearchQuery, (newValue) => {
-        getSearchDataFromApi(newValue)
+        if(newValue == '' || newValue == ' '){
+            setHomeSearchData([])
+        } else {
+            getSearchDataFromApi(newValue)
+        }
     })
 
 </script>
@@ -96,7 +98,7 @@ import { useCallApi } from '~/api/useCallApi'
     </div>
     
     <p class="absolute inset-0 flex justify-center text-sm text-white top-10 text-opacity-30"> 
-        Last Update : {{ homeCurrentData.current.last_updated ?? `--:--:--` }}
+        <!-- Last Update : {{ homeCurrentData.current.last_updated ?? `--:--:--` }} -->
     </p>
 
 
@@ -123,13 +125,13 @@ import { useCallApi } from '~/api/useCallApi'
         </div>
 
         <div class="flex justify-center w-1/3 pt-2.5">
-            <div class="flex items-center justify-center transition-all rounded-t-full shadow-md pb-11 w-28 h-28 addbtn hover:scale-105">
+            <button @click="searchModalIsShow = true" class="flex items-center justify-center transition-all rounded-t-full shadow-md pb-11 w-28 h-28 addbtn hover:scale-105">
                 <i class="text-black scale-150 fa-solid fa-plus"></i>
-            </div>
+            </button>
         </div>
 
         <div class="flex items-center justify-end w-1/3 h-full">
-            <button @click="openSearchModal">    
+            <button>    
                 <lord-icon
                     src="https://cdn.lordicon.com/dfxesbyu.json"
                     trigger="hover"
@@ -151,9 +153,70 @@ import { useCallApi } from '~/api/useCallApi'
                 <i class="fa-solid fa-magnifying-glass text-[#ab25c9]"></i>
             </div>
         </div>
+        <div class="flex items-center gap-2 text-[.75rem] text-white pl-2 opacity-50" v-if="Object.keys(homeSearchData).length == 0">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <p class="pb-0.5">get results by City Name or Country Name</p>
+        </div>
 
-        <div class="flex flex-col h-full gap-10 mt-3 overflow-scroll">
-            <SearchResultItem v-for="(data, index) in homeSearchData" :key="`data-${index}`" :data="data" />
+        <div class="flex items-center justify-center w-full h-[15rem] loading">
+            <Loading
+                v-if="searchLoading"
+                v-model:active="searchModalIsShow"
+                transition="fade"
+                color="#ab25c9"
+                loader="dots"
+                background-color="transparent"
+                :can-cancel="true"
+                :on-cancel="onCancel"
+                :is-full-page="false"
+            />
+
+            <p v-else-if="!searchLoading && Object.keys(homeSearchData).length == 0" class="text-white text-[1rem]">
+                No result found...!
+            </p>
+
+            <div v-else-if="!searchLoading && Object.keys(homeSearchData).length > 0" class="flex flex-col w-full h-full gap-10 mt-3 overflow-scroll">
+                <SearchResultItem v-for="(data, index) in homeSearchData" :key="`data-${index}`" :data="data" />
+            </div>
+        </div>
+
+    </Modal>
+
+    <Modal v-if="savedLocationsModalIsShow" v-model="savedLocationsModalIsShow" >
+
+        <div class="search-input">
+            <div class="w-11/12">
+                <input type="text" v-model="searchQuery" placeholder="Search Locations...">
+            </div>
+            <div class="w-1/12">
+                <i class="fa-solid fa-magnifying-glass text-[#ab25c9]"></i>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 text-[.75rem] text-white pl-2 opacity-50" v-if="Object.keys(homeSearchData).length == 0">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <p class="pb-0.5">get results by City Name or Country Name</p>
+        </div>
+
+        <div class="flex items-center justify-center w-full h-[15rem] loading">
+            <Loading
+                v-if="searchLoading"
+                v-model:active="searchModalIsShow"
+                transition="fade"
+                color="#ab25c9"
+                loader="dots"
+                background-color="transparent"
+                :can-cancel="true"
+                :on-cancel="onCancel"
+                :is-full-page="false"
+            />
+
+            <p v-else-if="!searchLoading && Object.keys(homeSearchData).length == 0" class="text-white text-[1rem]">
+                No result found...!
+            </p>
+
+            <div v-else-if="!searchLoading && Object.keys(homeSearchData).length > 0" class="flex flex-col w-full h-full gap-10 mt-3 overflow-scroll">
+                <SearchResultItem v-for="(data, index) in homeSearchData" :key="`data-${index}`" :data="data" />
+            </div>
         </div>
 
     </Modal>

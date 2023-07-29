@@ -43,3 +43,11 @@
 .range-progress > .vue3-slider.circular > .handle-container:nth-child(2) > .handle {
     display: none !important;
 }
+
+.loading > .vl-overlay {
+    position: unset !important;
+}
+
+.loading > .vl-overlay > .vl-background {
+    display: none !important;
+}
