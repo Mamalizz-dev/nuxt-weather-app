@@ -19,6 +19,9 @@ export const useHomeService = () => {
     const setHomeSearchData = (data: any) => {
         store.setSearchData(data)
     }
+    const addSavedLocations = (data: any) => {
+        store.setSavedLocations(data)
+    }
 
 
 // computed
@@ -26,6 +29,7 @@ export const useHomeService = () => {
     const homeCurrentData = computed(() => store.getCurrentData)
     const homeforecastData = computed(() => store.getForecastData)
     const homeSearchData = computed(() => store.getSearchData)
+    const homeSavedLoctions = computed(() => store.getSevedLocations)
 
 
 
@@ -36,6 +40,8 @@ export const useHomeService = () => {
         setHomeForecastData,
         homeforecastData,
         setHomeSearchData,
-        homeSearchData
+        homeSearchData,
+        addSavedLocations,
+        homeSavedLoctions
     }
 }

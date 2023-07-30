@@ -7,7 +7,8 @@ enum ApiTypes {
 interface StoreTypes {
     current: any,
     forecast: any,
-    search: any
+    search: any,
+    savedLocations: any
 }
 
 export { 

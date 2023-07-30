@@ -1,18 +1,20 @@
 import { defineStore } from "pinia";
 import { StoreTypes } from "~/types/types";
-import { useSessionStorage } from "@vueuse/core";
+import { useSessionStorage, useLocalStorage } from "@vueuse/core";
 
-export const useStore = defineStore('Store', {
+export const useStore = defineStore('store', {
     state: () => ({
         current : useSessionStorage('current', {}),
         forecast : useSessionStorage('forecast', {}),
-        search : useSessionStorage('search', [])
+        search : useSessionStorage('search', []),
+        savedLocations : useLocalStorage('saved-locations', []),
     } as StoreTypes ),
 
     getters: {
         getCurrentData: (state) => state.current,
         getForecastData: (state) => state.forecast,
-        getSearchData: (state) => state.search
+        getSearchData: (state) => state.search,
+        getSevedLocations: (state) => state.savedLocations
     },
 
     actions: {
@@ -36,6 +38,14 @@ export const useStore = defineStore('Store', {
         setSearchData(payload: any){
             try {
                 this.search = payload
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        setSavedLocations(payload: any){
+            try {
+                this.savedLocations.push(payload)
             } catch (error) {
                 console.log(error);
             }

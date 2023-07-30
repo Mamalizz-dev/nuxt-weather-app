@@ -16,7 +16,7 @@ import Loading from 'vue-loading-overlay'
     //@ts-ignore
     const { getCurrentDataFromApi, getForecastDataFromApi, currentLoading, forecastLoading, getSearchDataFromApi , searchLoading } = useCallApi()
     const { getUserLocation } = useUserLocation()
-    const { homeCurrentData, homeforecastData, homeSearchData, setHomeSearchData } = useHomeService()
+    const { homeCurrentData, homeforecastData, homeSearchData, setHomeSearchData, homeSavedLoctions } = useHomeService()
     
     const searchModalIsShow = ref<boolean>(false)
     const savedLocationsModalIsShow = ref<boolean>(false)
@@ -125,13 +125,18 @@ import Loading from 'vue-loading-overlay'
         </div>
 
         <div class="flex justify-center w-1/3 pt-2.5">
-            <button @click="searchModalIsShow = true" class="flex items-center justify-center transition-all rounded-t-full shadow-md pb-11 w-28 h-28 addbtn hover:scale-105">
-                <i class="text-black scale-150 fa-solid fa-plus"></i>
+            <button @click="searchModalIsShow = true" class="flex items-center justify-center transition-all rounded-t-full shadow-md pb-12 w-[7.2rem] h-[7.2rem] addbtn hover:scale-105">
+                <lord-icon
+                    src="https://cdn.lordicon.com/zgogqkqu.json"
+                    trigger="hover"
+                    colors="primary:#4be1ec,secondary:#cb5eee"
+                    style="width:50px;height:50px">
+                </lord-icon>
             </button>
         </div>
 
         <div class="flex items-center justify-end w-1/3 h-full">
-            <button>    
+            <button @click="savedLocationsModalIsShow= true">    
                 <lord-icon
                     src="https://cdn.lordicon.com/dfxesbyu.json"
                     trigger="hover"
@@ -172,7 +177,7 @@ import Loading from 'vue-loading-overlay'
             />
 
             <p v-else-if="!searchLoading && Object.keys(homeSearchData).length == 0" class="text-white text-[1rem]">
-                No result found...!
+                No results found...!
             </p>
 
             <div v-else-if="!searchLoading && Object.keys(homeSearchData).length > 0" class="flex flex-col w-full h-full gap-10 mt-3 overflow-scroll">
@@ -184,37 +189,10 @@ import Loading from 'vue-loading-overlay'
 
     <Modal v-if="savedLocationsModalIsShow" v-model="savedLocationsModalIsShow" >
 
-        <div class="search-input">
-            <div class="w-11/12">
-                <input type="text" v-model="searchQuery" placeholder="Search Locations...">
-            </div>
-            <div class="w-1/12">
-                <i class="fa-solid fa-magnifying-glass text-[#ab25c9]"></i>
-            </div>
-        </div>
-        <div class="flex items-center gap-2 text-[.75rem] text-white pl-2 opacity-50" v-if="Object.keys(homeSearchData).length == 0">
-            <i class="fa-solid fa-circle-exclamation"></i>
-            <p class="pb-0.5">get results by City Name or Country Name</p>
-        </div>
+        <h2 class="text-2xl text-left text-white">Saved Locations</h2>
 
         <div class="flex items-center justify-center w-full h-[15rem] loading">
-            <Loading
-                v-if="searchLoading"
-                v-model:active="searchModalIsShow"
-                transition="fade"
-                color="#ab25c9"
-                loader="dots"
-                background-color="transparent"
-                :can-cancel="true"
-                :on-cancel="onCancel"
-                :is-full-page="false"
-            />
-
-            <p v-else-if="!searchLoading && Object.keys(homeSearchData).length == 0" class="text-white text-[1rem]">
-                No result found...!
-            </p>
-
-            <div v-else-if="!searchLoading && Object.keys(homeSearchData).length > 0" class="flex flex-col w-full h-full gap-10 mt-3 overflow-scroll">
+            <div class="flex flex-col w-full h-full gap-10 mt-3 overflow-scroll">
                 <SearchResultItem v-for="(data, index) in homeSearchData" :key="`data-${index}`" :data="data" />
             </div>
         </div>
@@ -230,8 +208,11 @@ import Loading from 'vue-loading-overlay'
 }
 
 .addbtn{
-    background: linear-gradient(234deg, rgba(137,78,160,1) 0%, rgba(89,41,103,1) 68%, rgba(45,18,56,1) 100%);
-    box-shadow: 1px -1px 20px 0px rgba(137,78,160,1)
+    background: #aa25c933;
+    box-shadow: 0 1px 10px 0 rgba(109, 31, 135, 1);
+    backdrop-filter: blur(8.5px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 2px solid rgba(255, 255, 255, .3);
 }
 
 .search-input {
