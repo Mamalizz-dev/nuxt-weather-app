@@ -23,6 +23,10 @@ export const useHomeService = () => {
         store.setSavedLocations(data)
     }
 
+    const removeSavedLocations = (id: any) => {
+        store.removeSavedLocation(id)
+    }
+
 
 // computed
 
@@ -42,6 +46,7 @@ export const useHomeService = () => {
         setHomeSearchData,
         homeSearchData,
         addSavedLocations,
-        homeSavedLoctions
+        homeSavedLoctions,
+        removeSavedLocations
     }
 }

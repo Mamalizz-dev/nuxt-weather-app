@@ -49,6 +49,19 @@ export const useStore = defineStore('store', {
             } catch (error) {
                 console.log(error);
             }
+        },
+
+        removeSavedLocation(id: number){
+            try {
+                const index = this.savedLocations.findIndex((item: any) => item.id === id);
+                if (index !== -1) {
+                  this.savedLocations.splice(index, 1);
+                } else {
+                  console.log('Item not found in savedLocations array.');
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
     },
     

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 // import
-import { useUserLocation } from '~/utils/useUserLocation'
+import { useGetCurrentLocationData } from '~/composables/useGetCurrentLocationData'
 import { useHomeService } from '~/composables/useHomeServices'
 import { useCallApi } from '~/api/useCallApi'
 import Loading from 'vue-loading-overlay'
@@ -14,9 +14,9 @@ import Loading from 'vue-loading-overlay'
     const { $gsap: gsap, $Draggable: Draggable } = useNuxtApp();
 
     //@ts-ignore
-    const { getCurrentDataFromApi, getForecastDataFromApi, currentLoading, forecastLoading, getSearchDataFromApi , searchLoading } = useCallApi()
-    const { getUserLocation } = useUserLocation()
-    const { homeCurrentData, homeforecastData, homeSearchData, setHomeSearchData, homeSavedLoctions } = useHomeService()
+    const { getSearchDataFromApi , searchLoading } = useCallApi()
+    const { getCurrentLocationData, currentLoading, forecastLoading } = useGetCurrentLocationData()
+    const { homeCurrentData, homeSearchData, setHomeSearchData, homeSavedLoctions, removeSavedLocations } = useHomeService()
     
     const searchModalIsShow = ref<boolean>(false)
     const savedLocationsModalIsShow = ref<boolean>(false)
@@ -24,22 +24,26 @@ import Loading from 'vue-loading-overlay'
     const debouncedearchQuery = refDebounced(searchQuery, 700)
     
     onMounted(() => {
-        const timeline = gsap.timeline({defaults: {duration: 1}});
-
-        getUserLocation().then((cityName) => {
-            getCurrentDataFromApi(cityName).then(() => {
-                timeline.fromTo('.degree', { opacity: 0, blur: 1, scale:.95 }, { opacity: 1, blur: 0, scale: 1, duration: 1 })
-            }).then(() => {
-                getForecastDataFromApi(cityName).then(() => {
-                    timeline.fromTo('.hotbar', { y: '100%' }, { y: '0%', ease: 'Bounce.easeOut', duration: 1})
-                    timeline.from('.hourly' , { opacity: 0, stagger: 0.2,  duration: 1})
-                })
-            })
+        getCurrentLocationData()
+        nextTick(() => {
+            console.log(currentLoading.value);
+            
         })
     })
 
 // methods
 
+    const removeLocation = (id: number) => { 
+        gsap?.to(`#search-item-${id}`, {
+            x: '30rem',
+            height: 0,
+            opacity: 0,
+            duration: 0.5,
+        }).then(() => {
+            removeSavedLocations(id);
+        })
+    }
+    
 // watch
 
     watch(debouncedearchQuery, (newValue) => {
@@ -47,6 +51,14 @@ import Loading from 'vue-loading-overlay'
             setHomeSearchData([])
         } else {
             getSearchDataFromApi(newValue)
+        }
+    })
+
+    watch(savedLocationsModalIsShow, (newValue) => {
+        if(newValue){
+            setTimeout(() => {
+                gsap?.fromTo('.search-items', {opacity: 0}, {opacity: 1, stagger: 0.3, delay: .5, duration: 1})
+            }, 100);
         }
     })
 
@@ -65,7 +77,6 @@ import Loading from 'vue-loading-overlay'
 
     <div v-if="currentLoading" class="flex flex-col items-center absolute inset-0 top-[15%]">
         <Skeleton 
-            
             v-for="(i, index) in 4"
             :key="index"
             :width="index == 0 ? `13rem` : index == 1 ? '5rem' : index == 2 ? '6.5rem' : index == 3 ? '10rem' : '10rem'" 
@@ -75,25 +86,22 @@ import Loading from 'vue-loading-overlay'
     </div>
 
     <div v-else class="flex flex-col items-center absolute w-full top-[15%] degree">
-
-        <h1 class="text-[2.5rem] text-white items-center flex gap-2">
+        <h1 class="text-[2rem] text-white items-center flex gap-2 line-clamp-1">
             <i class="text-[2rem] fa-solid fa-location-dot"></i>
-            {{ homeCurrentData.location.name ?? 'Undefined' }}
-            <p class="pt-4 text-sm">/ {{ homeCurrentData.location.region }}</p>
+            <span class="flex-1">{{ homeCurrentData.location.name ?? 'Undefined' }}</span>
+            <p class="pt-4 text-sm line-clamp-1">/ {{ homeCurrentData.location.region }}</p>
         </h1>
-        <div class="w-1/2 h-[7rem] flex items-center justify-center">
-            <img :src="(homeCurrentData.current.condition.icon).replace('64x64', '128x128')" class="w-[10rem] scale-125 h-[10rem] bg-cover" :alt="homeCurrentData.current.condition.text">
+        <div class="w-1/2 max-w-[15rem] h-[7rem] flex items-center justify-center">
+            <img
+                :src="(homeCurrentData.current.condition.icon).replace('64x64', '128x128')"
+                class="w-[10rem] scale-125 h-[10rem] bg-cover"
+                :alt="homeCurrentData.current.condition.text"
+            />
         </div>
-        <p class="text-white text-[2.2rem] -mt-2">
-            {{ homeCurrentData.current.condition.text }}
-        </p>
-        <div class="flex gap-x-5">  
-            <p class="text-lg text-white">
-                C: {{ homeCurrentData.current.temp_c ?? 0 }}°
-            </p>
-            <p class="text-lg text-white">
-                F: {{ homeCurrentData.current.temp_c ?? 0 }}°F
-            </p>
+        <p class="text-white text-[2.2rem] -mt-2">{{ homeCurrentData.current.condition.text }}</p>
+        <div class="flex gap-x-5">
+            <p class="text-lg text-white">C: {{ homeCurrentData.current.temp_c ?? 0 }}°</p>
+            <p class="text-lg text-white">F: {{ homeCurrentData.current.temp_f ?? 0 }}°F</p>
         </div>
     </div>
     
@@ -105,7 +113,6 @@ import Loading from 'vue-loading-overlay'
     <client-only>
         <div v-if="currentLoading || forecastLoading" class="w-full">
             <Skeleton 
-                
                 :width="`100%`" 
                 :height="`8rem`" 
                 :style="`border-radius: 1rem;border-top-left-radius: 2.5rem; border-top-right-radius: 2.5rem; position: fixed; bottom: 0px`" 
@@ -191,13 +198,26 @@ import Loading from 'vue-loading-overlay'
 
         <h2 class="text-2xl text-left text-white">Saved Locations</h2>
 
-        <div class="flex items-center justify-center w-full h-[15rem] loading">
-            <div class="flex flex-col w-full h-full gap-10 mt-3 overflow-scroll">
-                <SearchResultItem v-for="(data, index) in homeSearchData" :key="`data-${index}`" :data="data" />
+        <div class="flex items-center justify-center w-full h-[18rem] loading">
+            <div v-if="Object.keys(homeSavedLoctions).length > 0" class="flex flex-col w-full h-full gap-10 mt-3 overflow-scroll">
+                <SearchResultItem 
+                    v-for="(data, index) in homeSavedLoctions" 
+                    :id="`search-item-${data.id}`" 
+                    :key="`data-${index}-${data.id}`" 
+                    :data="data" 
+                    @remove="removeLocation"
+                />
             </div>
+
+            <p v-else class="text-lg text-white opacity-50 animate__animated animate__zoomIn">
+                No saved locations found...!
+            </p>
+
         </div>
+        
 
     </Modal>
+    
 </template>
 
 

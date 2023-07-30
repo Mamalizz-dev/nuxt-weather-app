@@ -150,13 +150,13 @@
 
 <template>
     <div class="fixed bottom-0 w-full hotbar rounded-t-[2.5rem] transition-all duration-200 ease-out" ref="hotbar" :style="{height: hotbarHeightStyle}">
-            <div class="flex items-center justify-center w-full h-10"
-                @touchstart.passive="toggleMove"
-                @touchmove.passive="onTouchMove"
-                @touchend.passive="onTouchEnd"
-            >
-                <div class="edge" />
-            </div>  
+        <div class="flex items-center justify-center w-full h-10"
+            @touchstart.passive="toggleMove"
+            @touchmove.passive="onTouchMove"
+            @touchend.passive="onTouchEnd"
+        >
+            <div class="edge" />
+        </div>  
 
         <div class="flex justify-between w-full px-8 py-2">
             <button class="text-white text-md">
@@ -171,7 +171,7 @@
             <div v-for="(hour, index) in homeforecastData.forecast.forecastday[0].hour" :key="`day-${index}`" class="w-[4.8rem] shrink-0 min-h-[10rem] rounded-full hotbar-item hourly flex flex-col items-center justify-between px-3 py-5">
                 <p class="text-white text-md">{{ (hour.time).split(' ').pop() }}</p>
                 <!-- <i class="text-white scale-150 fa-solid fa-cloud-showers-heavy"></i> -->
-                <img :src="hour.condition.icon" class="w-full scale-150" :alt="hour.condition.text">
+                <img :src="hour.condition.icon" class="w-full scale-110" :alt="hour.condition.text">
                 <p class="text-white text-md">{{ hour.temp_c }}°</p>
             </div>
         </div>

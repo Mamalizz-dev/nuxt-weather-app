@@ -1,11 +1,10 @@
 <script setup lang="ts">
 
-import { useHomeService } from '~/composables/useHomeServices';
+    import { useHomeService } from '~/composables/useHomeServices';
 
 // props
     interface Props {
         data: any
-        isSaved: Boolean
     }
 
     const props = defineProps<Props>()
@@ -20,21 +19,22 @@ import { useHomeService } from '~/composables/useHomeServices';
 // computed
 
     const isSaved = computed(() => {
-        console.log(homeSavedLoctions.value.includes(data.value));
-        
-        return !homeSavedLoctions.value.includes(data.value)
+        if (data.value && data.value.id) {
+            return homeSavedLoctions.value.some((location: any) => location.id === data.value.id);
+        }
+        return false; 
     })
 
 // methods 
 
-    const savedLocation = () => {
+    const saveLocation = () => {
         addSavedLocations(data.value)
     }
 
 </script>
 
 <template>
-    <div class="relative w-fullsearch-item">
+    <div class="relative w-full search-items">
         <div class="search-item-bg">
             <div class="flex flex-col w-1/2 h-full gap-1.5 pt-1">
                 <h1 class="text-[2rem] text-white text-clip line-clamp-1">{{ data.name }}</h1>
@@ -48,12 +48,12 @@ import { useHomeService } from '~/composables/useHomeServices';
                 </div>
             </div>
         </div>
-        <button @click="savedLocation" class="absolute flex flex-col items-center overflow-visible gap-y-2 right-3 -top-2">
+        <button @click="isSaved ? $emit('remove', data.id) : saveLocation()" class="absolute flex flex-col items-center overflow-visible gap-y-2 right-3 -top-2">
             <lord-icon
-                ref="icon"
-                src="https://cdn.lordicon.com/ibnprjhs.json"
-                trigger="morph"
+                src="https://cdn.lordicon.com/dfxesbyu.json"
+                trigger="hover"
                 colors="primary:#4be1ec,secondary:#cb5eee"
+                state="hover-2"
                 style="width:100px;height:100px">
             </lord-icon>
             <button class="text-white py-1 px-5 rounded-[.6rem] bg-gradient-to-tr from-[#3659b1] to-[#e64497]">{{ isSaved ? 'Saved' : 'Save' }}</button>
