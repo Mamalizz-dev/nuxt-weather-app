@@ -4,6 +4,7 @@ import { useSessionStorage, useLocalStorage } from "@vueuse/core";
 
 export const useStore = defineStore('store', {
     state: () => ({
+        isRefreshing: false,
         current : useSessionStorage('current', {}),
         forecast : useSessionStorage('forecast', {}),
         search : useSessionStorage('search', []),
@@ -14,7 +15,8 @@ export const useStore = defineStore('store', {
         getCurrentData: (state) => state.current,
         getForecastData: (state) => state.forecast,
         getSearchData: (state) => state.search,
-        getSevedLocations: (state) => state.savedLocations
+        getSevedLocations: (state) => state.savedLocations,
+        getIsRefreshing: (state) => state.isRefreshing
     },
 
     actions: {
@@ -61,6 +63,24 @@ export const useStore = defineStore('store', {
                 }
             } catch (error) {
                 console.log(error);
+            }
+        },
+
+        setIsRefreshing(payload: boolean){
+            try {
+                this.isRefreshing = payload
+            } catch (error) {
+                console.log(error);
+                
+            }
+        },
+
+        clearSearch(){
+            try {
+                this.search = []
+            } catch (error) {
+                console.log(error);
+                
             }
         }
     },

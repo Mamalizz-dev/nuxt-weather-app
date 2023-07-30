@@ -5,6 +5,7 @@ enum ApiTypes {
 }
 
 interface StoreTypes {
+    isRefreshing: Boolean,
     current: any,
     forecast: any,
     search: any,

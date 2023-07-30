@@ -27,6 +27,14 @@ export const useHomeService = () => {
         store.removeSavedLocation(id)
     }
 
+    const setIsRefreshing = (status) => {
+        store.setIsRefreshing(status)
+    }
+
+    const clearSearchList = () => {
+        store.clearSearch
+    }
+
 
 // computed
 
@@ -34,8 +42,7 @@ export const useHomeService = () => {
     const homeforecastData = computed(() => store.getForecastData)
     const homeSearchData = computed(() => store.getSearchData)
     const homeSavedLoctions = computed(() => store.getSevedLocations)
-
-
+    const homeIsRefreshing = computed(() => store.getIsRefreshing)
 
 
     return {
@@ -47,6 +54,9 @@ export const useHomeService = () => {
         homeSearchData,
         addSavedLocations,
         homeSavedLoctions,
-        removeSavedLocations
+        setIsRefreshing,
+        homeIsRefreshing,
+        removeSavedLocations,
+        clearSearchList,
     }
 }

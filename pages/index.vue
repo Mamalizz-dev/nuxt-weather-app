@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 // import
-import { useGetCurrentLocationData } from '~/composables/useGetCurrentLocationData'
+import { useGetLocationData } from '~/composables/useGetLocationData'
 import { useHomeService } from '~/composables/useHomeServices'
 import { useCallApi } from '~/api/useCallApi'
 import Loading from 'vue-loading-overlay'
@@ -15,13 +15,13 @@ import Loading from 'vue-loading-overlay'
 
     //@ts-ignore
     const { getSearchDataFromApi , searchLoading } = useCallApi()
-    const { getCurrentLocationData, currentLoading, forecastLoading } = useGetCurrentLocationData()
-    const { homeCurrentData, homeSearchData, setHomeSearchData, homeSavedLoctions, removeSavedLocations } = useHomeService()
+    const { getCurrentLocationData, currentLoading, forecastLoading, getSelectedLocationData } = useGetLocationData()
+    const { homeCurrentData, homeSearchData, setHomeSearchData, homeSavedLoctions, removeSavedLocations, clearSearchList, setIsRefreshing } = useHomeService()
     
     const searchModalIsShow = ref<boolean>(false)
     const savedLocationsModalIsShow = ref<boolean>(false)
     const searchQuery = ref<string>('')
-    const debouncedearchQuery = refDebounced(searchQuery, 700)
+    const debouncedearchQuery = refDebounced(searchQuery, 500)
     
     onMounted(() => {
         getCurrentLocationData()
@@ -40,14 +40,32 @@ import Loading from 'vue-loading-overlay'
         })
     }
 
+    const refreshAnimtion = () => {
+        return new Promise<any>((resolve, reject) => {     
+            const refreshTimeline = gsap.timeline({defaults: {duration: 1}})
+            refreshTimeline
+                .to('.degree', {scale: .75, opacity: 0, ease: 'Power1.easeOut'})
+                .to('.hotbar', {y: '100%', ease: 'Bounce.easeOut'})
+                .then(() => {
+                    // setIsRefreshing(false)
+                    resolve(true)
+                })
+        })
+    
+    }
+
     const refresh = () => {
-        const refreshTimeline = gsap.timeline({defaults: {duration: 1}})
-        refreshTimeline
-            .to('.degree', {scale: .75, opacity: 0, ease: 'Power1.easeOut'})
-            .to('.hotbar', {y: '100%', ease: 'Bounce.easeOut'})
-            .then(() => {
-                getCurrentLocationData()
-            })
+        refreshAnimtion().then(() => {
+            getCurrentLocationData()
+        })
+    }
+
+    const getSelectedLoaction = (cityName: string) => {
+        searchModalIsShow.value = false
+        savedLocationsModalIsShow.value = false
+        refreshAnimtion().then(() => {
+            getSelectedLocationData(cityName)
+        })
     }
     
 // watch
@@ -65,6 +83,13 @@ import Loading from 'vue-loading-overlay'
             setTimeout(() => {
                 gsap?.fromTo('.search-items', {opacity: 0}, {opacity: 1, stagger: 0.3, delay: .5, duration: 1})
             }, 100);
+        }
+    })
+
+    watch(searchModalIsShow, (newValue) => {
+        if(!newValue){
+            searchQuery.value = ''
+            clearSearchList()
         }
     })
 
@@ -101,7 +126,7 @@ import Loading from 'vue-loading-overlay'
         <div class="w-1/2 max-w-[15rem] h-[7rem] flex items-center justify-center">
             <img
                 :src="(homeCurrentData.current.condition.icon).replace('64x64', '128x128')"
-                class="w-[10rem] scale-125 h-[10rem] bg-cover"
+                class="w-[7rem] scale-125 h-[7rem] bg-cover"
                 :alt="homeCurrentData.current.condition.text"
             />
         </div>
@@ -198,7 +223,12 @@ import Loading from 'vue-loading-overlay'
             </p>
 
             <div v-else-if="!searchLoading && Object.keys(homeSearchData).length > 0" class="flex flex-col w-full h-full gap-10 mt-3 overflow-scroll">
-                <SearchResultItem v-for="(data, index) in homeSearchData" :key="`data-${index}`" :data="data" />
+                <SearchResultItem 
+                    v-for="(data, index) in homeSearchData" 
+                    :key="`data-${index}`" 
+                    :data="data" 
+                    @click="getSelectedLoaction(data.name)"
+                />
             </div>
         </div>
 
@@ -214,6 +244,7 @@ import Loading from 'vue-loading-overlay'
                     :key="`data-${index}-${data.id}`" 
                     :data="data" 
                     @remove="removeLocation"
+                    @click="getSelectedLoaction(data.name)"
                 />
             </div>
 
@@ -250,4 +281,4 @@ import Loading from 'vue-loading-overlay'
 .search-input input {
     @apply bg-transparent h-full w-full outline-none border-none
 }
-</style>
+</style>composables/useGetLocationData
