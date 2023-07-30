@@ -25,10 +25,6 @@ import Loading from 'vue-loading-overlay'
     
     onMounted(() => {
         getCurrentLocationData()
-        nextTick(() => {
-            console.log(currentLoading.value);
-            
-        })
     })
 
 // methods
@@ -42,6 +38,16 @@ import Loading from 'vue-loading-overlay'
         }).then(() => {
             removeSavedLocations(id);
         })
+    }
+
+    const refresh = () => {
+        const refreshTimeline = gsap.timeline({defaults: {duration: 1}})
+        refreshTimeline
+            .to('.degree', {scale: .75, opacity: 0, ease: 'Power1.easeOut'})
+            .to('.hotbar', {y: '100%', ease: 'Bounce.easeOut'})
+            .then(() => {
+                getCurrentLocationData()
+            })
     }
     
 // watch
@@ -76,7 +82,8 @@ import Loading from 'vue-loading-overlay'
     </div>
 
     <div v-if="currentLoading" class="flex flex-col items-center absolute inset-0 top-[15%]">
-        <Skeleton 
+        <Skeleton
+            class="animate__animated animate__zoomIn"
             v-for="(i, index) in 4"
             :key="index"
             :width="index == 0 ? `13rem` : index == 1 ? '5rem' : index == 2 ? '6.5rem' : index == 3 ? '10rem' : '10rem'" 
@@ -112,7 +119,8 @@ import Loading from 'vue-loading-overlay'
 
     <client-only>
         <div v-if="currentLoading || forecastLoading" class="w-full">
-            <Skeleton 
+            <Skeleton
+                class="duration-100 animate__animated animate__slideInUp"
                 :width="`100%`" 
                 :height="`8rem`" 
                 :style="`border-radius: 1rem;border-top-left-radius: 2.5rem; border-top-right-radius: 2.5rem; position: fixed; bottom: 0px`" 
@@ -123,12 +131,14 @@ import Loading from 'vue-loading-overlay'
 
     <div class="fixed bottom-0 flex justify-between w-full h-20 px-10 bg-black hotbar-buttons rounded-t-xl">
         <div class="flex items-center justify-start w-1/3">
-            <lord-icon
-                src="https://cdn.lordicon.com/elzslyvl.json"
-                trigger="hover"
-                colors="primary:#4be1ec,secondary:#cb5eee"
-                style="width:45px;height:45px;">
-            </lord-icon>
+            <button @click="refresh">
+                <lord-icon
+                    src="https://cdn.lordicon.com/elzslyvl.json"
+                    trigger="hover"
+                    colors="primary:#4be1ec,secondary:#cb5eee"
+                    style="width:45px;height:45px;">
+                </lord-icon>
+            </button>
         </div>
 
         <div class="flex justify-center w-1/3 pt-2.5">
@@ -155,9 +165,9 @@ import Loading from 'vue-loading-overlay'
         </div>
     </div>  
 
-    <Modal v-if="searchModalIsShow" v-model="searchModalIsShow" >
+    <Modal v-if="searchModalIsShow" v-model="searchModalIsShow" title="Find New Locations">
 
-        <div class="search-input">
+        <div class="mt-4 search-input">
             <div class="w-11/12">
                 <input type="text" v-model="searchQuery" placeholder="Search Locations...">
             </div>
@@ -194,9 +204,7 @@ import Loading from 'vue-loading-overlay'
 
     </Modal>
 
-    <Modal v-if="savedLocationsModalIsShow" v-model="savedLocationsModalIsShow" >
-
-        <h2 class="text-2xl text-left text-white">Saved Locations</h2>
+    <Modal v-if="savedLocationsModalIsShow" v-model="savedLocationsModalIsShow" title="Saved Locations">
 
         <div class="flex items-center justify-center w-full h-[18rem] loading">
             <div v-if="Object.keys(homeSavedLoctions).length > 0" class="flex flex-col w-full h-full gap-10 mt-3 overflow-scroll">

@@ -10,6 +10,10 @@
         modelValue: {
           default: false,
         },
+        title: {
+            type: String,
+            default: ''
+        },
         closeOnBlur: {
             type: Boolean,
             default: true
@@ -39,9 +43,10 @@
                     @click.stop
                     class="modal relative flex flex-col min-h-[50vh] max-h-[75vh] overflow-scroll w-11/12 gap-4 px-6 pt-10 md:w-[30rem] shrink-0 rounded-[2.188rem] shadow-md animate__animated animate__fadeInDown"
                >
-                    <button  class="flex justify-end w-full h-8 pr-2">
+                    <div class="flex items-center justify-between w-full h-8 pr-2">
+                        <h2 class="pb-1 text-2xl text-left text-white opacity-50">{{ title }}</h2>
                         <i class="text-lg text-white fa-solid fa-xmark" @click="closeToastModal"></i>
-                    </button>
+                    </div>
                     <slot />
                </div>
           </div>

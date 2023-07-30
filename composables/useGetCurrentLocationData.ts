@@ -13,15 +13,17 @@ export const useGetCurrentLocationData = () => {
 
         getUserLocation().then((cityName) => {
             getCurrentDataFromApi(cityName).then(() => {
-                timeline.fromTo('.degree', { opacity: 0, blur: 1, scale:.95 }, { opacity: 1, blur: 0, scale: 1, duration: 1 })
+                timeline.fromTo('.degree', { opacity: 0, blur: 1, scale:.95 }, { opacity: 1, blur: 0, scale: 1 })
             }).then(() => {
                 getForecastDataFromApi(cityName).then(() => {
-                    timeline.fromTo('.hotbar', { y: '100%' }, { y: '0%', ease: 'Bounce.easeOut', duration: 1})
+                    timeline.fromTo('.hotbar', { y: '100%' }, { y: '0%', ease: 'Bounce.easeOut'})
                     timeline.from('.hourly' , { opacity: 0, stagger: 0.2,  duration: 1})
                 })
             })
         })
     }
+
+    // const getSelectedLocation
 
     return {
         getCurrentLocationData,
