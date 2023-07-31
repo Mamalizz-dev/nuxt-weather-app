@@ -1,8 +1,11 @@
 <script setup lang="ts">
 
+// imports
+
     import { useHomeService } from '~/composables/useHomeServices';
 
 // props
+
     interface Props {
         data: any
     }

@@ -4,9 +4,13 @@ import { useCallApi } from '~/api/useCallApi'
 
 export const useGetLocationData = () => {
 
+// state
+
     const { getUserLocation } = useUserLocation()
     const { getCurrentDataFromApi, getForecastDataFromApi, currentLoading, forecastLoading } = useCallApi()
     const { $gsap: gsap, $Draggable: Draggable } = useNuxtApp();
+
+// methods
 
     const getCurrentLocationData = () => {
         const timeline = gsap.timeline({defaults: {duration: 1}});
@@ -35,6 +39,8 @@ export const useGetLocationData = () => {
             })
         })
     }
+
+    
 
     return {
         getCurrentLocationData,

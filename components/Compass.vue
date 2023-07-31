@@ -1,5 +1,7 @@
 <script setup lang="ts">
 
+// props
+
     const props = defineProps({
         windSpeed: Number,
         windAngle: {
@@ -8,9 +10,13 @@
         }
     })
 
+// computed
+
     const compassAngle = computed(() => {
         return `transform: rotate(${props.windAngle}deg)`
     })
+
+// methods
 
     const letterAngle = (letter: string) => {
         const reverseAngle = 360 - props.windAngle;

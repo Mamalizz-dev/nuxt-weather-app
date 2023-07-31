@@ -1,10 +1,10 @@
 <script setup lang="ts">
 
 // import
-import { useGetLocationData } from '~/composables/useGetLocationData'
-import { useHomeService } from '~/composables/useHomeServices'
-import { useCallApi } from '~/api/useCallApi'
-import Loading from 'vue-loading-overlay'
+    import { useGetLocationData } from '~/composables/useGetLocationData'
+    import { useHomeService } from '~/composables/useHomeServices'
+    import { useCallApi } from '~/api/useCallApi'
+    import Loading from 'vue-loading-overlay'
 
 // state
 
@@ -22,10 +22,7 @@ import Loading from 'vue-loading-overlay'
     const savedLocationsModalIsShow = ref<boolean>(false)
     const searchQuery = ref<string>('')
     const debouncedearchQuery = refDebounced(searchQuery, 500)
-    
-    onMounted(() => {
-        getCurrentLocationData()
-    })
+
 
 // methods
 
@@ -94,6 +91,12 @@ import Loading from 'vue-loading-overlay'
         }
     })
 
+// onMounted
+
+    onMounted(() => {
+        getCurrentLocationData()
+    })
+
 </script>
 
 <template>
@@ -139,7 +142,7 @@ import Loading from 'vue-loading-overlay'
     </div>
     
     <p class="absolute inset-0 flex justify-center text-sm text-white top-10 text-opacity-30"> 
-        <!-- Last Update : {{ homeCurrentData.current.last_updated ?? `--:--:--` }} -->
+        Last Update : {{ homeCurrentData.current.last_updated ?? `--:--:--` }}
     </p>
 
 
