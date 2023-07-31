@@ -59,7 +59,14 @@
                 state="hover-2"
                 style="width:100px;height:100px">
             </lord-icon>
-            <button class="text-white py-1 px-5 rounded-[.6rem] bg-gradient-to-tr from-[#3659b1] to-[#e64497]">{{ isSaved ? 'Saved' : 'Save' }}</button>
+            <button v-if="isSaved" class="text-white py-1 px-5 rounded-[.6rem] bg-gradient-to-tr from-[#3659b1] to-[#e64497] flex items-center gap-2">
+                <p class="pb-0.5"> Saved </p>
+                <i class="text-white fa-solid fa-bookmark"></i> 
+            </button>
+            <button v-else class="text-white py-1 px-5 rounded-[.6rem] bg-gradient-to-tr from-[#3659b1] to-[#e64497] flex items-center gap-2">
+                <p class="pb-0.5"> Save </p>
+                <i class="text-white fa-regular fa-bookmark"></i>    
+            </button>
         </button>
     </div>
 </template>

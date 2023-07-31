@@ -225,7 +225,8 @@ import Loading from 'vue-loading-overlay'
                 <SearchResultItem 
                     v-for="(data, index) in homeSearchData" 
                     :key="`data-${index}`" 
-                    :data="data" 
+                    :data="data"
+                    @remove="removeLocation"
                     @click="getSelectedLoaction(data.name)"
                 />
             </div>
