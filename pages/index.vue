@@ -60,11 +60,13 @@ import Loading from 'vue-loading-overlay'
     }
 
     const getSelectedLoaction = (cityName: string) => {
-        searchModalIsShow.value = false
-        savedLocationsModalIsShow.value = false
-        refreshAnimtion().then(() => {
-            getSelectedLocationData(cityName)
-        })
+        if(homeCurrentData.value.location.name != cityName){
+            searchModalIsShow.value = false
+            savedLocationsModalIsShow.value = false
+            refreshAnimtion().then(() => {
+                getSelectedLocationData(cityName)
+            })
+        }
     }
     
 // watch
