@@ -14,7 +14,7 @@
 // state
 
     const icon = ref<any>(null)
-    const { addSavedLocations, homeSavedLoctions } = useHomeService()
+    const { addSavedLocations, homeSavedLoctions, homeCurrentData } = useHomeService()
 
 // computed
 

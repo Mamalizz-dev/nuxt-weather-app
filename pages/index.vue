@@ -16,7 +16,7 @@ import Loading from 'vue-loading-overlay'
     //@ts-ignore
     const { getSearchDataFromApi , searchLoading } = useCallApi()
     const { getCurrentLocationData, currentLoading, forecastLoading, getSelectedLocationData } = useGetLocationData()
-    const { homeCurrentData, homeSearchData, setHomeSearchData, homeSavedLoctions, removeSavedLocations, clearSearchList, setIsRefreshing } = useHomeService()
+    const { homeCurrentData, homeSearchData, setHomeSearchData, homeSavedLoctions, removeSavedLocations, clearSearchList } = useHomeService()
     
     const searchModalIsShow = ref<boolean>(false)
     const savedLocationsModalIsShow = ref<boolean>(false)
@@ -47,7 +47,6 @@ import Loading from 'vue-loading-overlay'
                 .to('.degree', {scale: .75, opacity: 0, ease: 'Power1.easeOut'})
                 .to('.hotbar', {y: '100%', ease: 'Bounce.easeOut'})
                 .then(() => {
-                    // setIsRefreshing(false)
                     resolve(true)
                 })
         })
