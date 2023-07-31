@@ -120,9 +120,9 @@ import Loading from 'vue-loading-overlay'
         <h1 class="text-[2rem] text-white items-center flex gap-2 line-clamp-1">
             <i class="text-[2rem] fa-solid fa-location-dot"></i>
             <span class="flex-1">{{ homeCurrentData.location.name ?? 'Undefined' }}</span>
-            <p class="pt-4 text-sm line-clamp-1">/ {{ homeCurrentData.location.region }}</p>
+            <p class="pt-4 text-sm line-clamp-1" v-if="homeCurrentData.location.region">/ {{ homeCurrentData.location.region }}</p>
         </h1>
-        <div class="w-1/2 max-w-[15rem] h-[7rem] flex items-center justify-center">
+        <div class="w-1/2 max-w-[15rem] h-[7rem] flex items-center justify-center my-3">
             <img
                 :src="(homeCurrentData.current.condition.icon).replace('64x64', '128x128')"
                 class="w-[7rem] scale-125 h-[7rem] bg-cover"
