@@ -1,5 +1,3 @@
-
-
 export const useUserLocation = () => {
 
     const config = useRuntimeConfig()
@@ -27,7 +25,12 @@ export const useUserLocation = () => {
                 console.error('Geolocation is not available in this browser.');
             }
         } catch (error) {
-            console.error('Error fetching user location:', error);
+            if (error instanceof GeolocationPositionError) {
+                console.error('Geolocation error code:', error.code);
+                console.error('Geolocation error message:', error.message);
+            } else {
+                console.error('Error fetching user location:', error);
+            }
         }
     }
 

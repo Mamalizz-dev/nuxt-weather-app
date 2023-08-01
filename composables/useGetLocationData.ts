@@ -16,10 +16,10 @@ export const useGetLocationData = () => {
         const timeline = gsap.timeline({defaults: {duration: 1}});
 
         getUserLocation().then((cityName) => {
-            getCurrentDataFromApi(cityName).then(() => {
+            getCurrentDataFromApi('shiraz').then(() => {
                 timeline.fromTo('.degree', { opacity: 0, blur: 1, scale:.95 }, { opacity: 1, blur: 0, scale: 1 })
             }).then(() => {
-                getForecastDataFromApi(cityName).then(() => {
+                getForecastDataFromApi('shiraz').then(() => {
                     timeline.fromTo('.hotbar', { y: '100%' }, { y: '0%', ease: 'Bounce.easeOut'})
                     timeline.from('.hourly' , { opacity: 0, stagger: 0.2,  duration: 1})
                 })

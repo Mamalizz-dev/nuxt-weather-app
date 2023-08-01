@@ -8,14 +8,13 @@
 
 // state
     
-    const { $gsap: gsap, $Draggable: Draggable } = useNuxtApp();
+    const { $gsap: gsap, $Draggable: Draggable, $BusEmit } = useNuxtApp();
     const { width: windowWidth, height: windowHeight } = useWindowSize()
     const toggleSlide = ref<boolean>(false)
     const touchStartPosition = ref<any>(null)
     const touchCurrentPosition = ref<any>(0)
     const hotbar = ref<HTMLDivElement | null>(null)
     const hotbarPosition = ref<string>('middle')
-    const airQualityModalIsShow = ref<boolean>(false)
 
     
     const { homeCurrentData, homeforecastData } = useHomeService()
@@ -78,6 +77,11 @@
         toggleSlide.value = false
         touchStartPosition.value = null;
     }
+
+    const openAirQualityModal = () => {
+        //@ts-ignore
+        $BusEmit('open-air-quality-modal')
+    }
     
 // watch
 
@@ -124,13 +128,6 @@
         }
     });
 
-    watch(airQualityModalIsShow, (newValue) => {
-        if(newValue){
-            setTimeout(() => {
-                gsap?.fromTo('.air-items', { opacity: 0 }, { opacity: 1, stagger: 0.2})
-            }, 100);
-        }
-    })
 
 </script>
 
@@ -163,7 +160,7 @@
             </div>
         </div>
 
-        <div class="grid w-full grid-cols-2 gap-5 px-5 py-2 overflow-scroll h-[54vh] pb-[20%] hotbar-details opacity-0 transition-all relative">
+        <div class="grid w-full grid-cols-2 gap-5 px-5 py-2 overflow-scroll h-[54vh] pb-[50%] hotbar-details opacity-0 transition-all relative">
 
             <HotbarItem :icon-classes="`fa-solid fa-heart-pulse`" title="AIR QULITY" :item-classes="`col-span-full justify-between`" >
             
@@ -176,7 +173,7 @@
 
 
                 <template #footer>
-                    <button class="flex items-center justify-between w-full h-10" @click="airQualityModalIsShow = true">
+                    <button class="flex items-center justify-between w-full h-10" @click="openAirQualityModal">
                         <p class="text-[--secondary-text-color] text-lg font-semibold">See more</p>
                         <i class="fa-solid fa-angle-right text-[--secondary-text-color] text-xl pt-1"></i>
                     </button>
@@ -267,22 +264,6 @@
                 </template>
             </HotbarItem>
             
-            <Modal v-if="airQualityModalIsShow" v-model="airQualityModalIsShow" >
-
-                <div 
-                    class="grid w-full grid-cols-2 gap-5 air-items" 
-                    v-for="(item, index) in Object.keys(homeCurrentData.current.air_quality)" 
-                    :key="`item-${index}`"
-                >
-                    <div class="bg-[#691a7b33] text-left text-white py-3 px-3 text-lg rounded-xl line-clamp-1 overflow-hidden text-ellipsis whitespace-pre">
-                        {{ item }}
-                    </div>
-                    <div class="bg-[#691a7b33] text-left text-white py-3 px-3 text-lg rounded-xl line-clamp-1 overflow-hidden text-ellipsis whitespace-pre">
-                        {{ (homeCurrentData.current.air_quality[item]).toFixed(2) ?? 0 }}
-                    </div>
-                </div>
-                
-            </Modal>
         </div>
         <div class="absolute bottom-0 z-10 h-[35%] w-full bg-gradient-to-t from-[rgba(0,0,0,1)] from-[1%] to-transparent" />
     </div>
