@@ -56,8 +56,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     BASE_URL: process.env.NUXT_API_BASE_URL,
-    API_KEY: process.env.NUXT_API_KEY,
     public: {
+      API_KEY: process.env.NUXT_API_KEY,
       OPEN_WEATHER_API_KEY: process.env.NUXT_OPEN_WEATHER_API_KEY
     }
   }

@@ -131,7 +131,7 @@
         </div>
     </div>
 
-    <div>
+    <div class="parent">
         <div v-if="currentLoading" class="flex flex-col items-center absolute inset-0 top-[15%]">
             <Skeleton
                 class="animate__animated animate__zoomIn"
