@@ -121,66 +121,59 @@
 </script>
 
 <template>
-    
-    <div class="relative flex w-full h-full">
-        <div 
-            class="absolute inset-0 w-full h-full"
-            :style="{width: `${windowWidth}px`, height: `${windowHeight}px`}"
-        >
-            <img src="~~/assets/images/background.jpg" alt="BACKGROUND" class="w-full h-full bg-cover">
-        </div>
-    </div>
 
-    <div class="parent">
-        <div v-if="currentLoading" class="flex flex-col items-center absolute inset-0 top-[15%]">
-            <Skeleton
-                class="animate__animated animate__zoomIn"
-                v-for="(i, index) in 4"
-                :key="index"
-                :width="index == 0 ? `13rem` : index == 1 ? '5rem' : index == 2 ? '6.5rem' : index == 3 ? '10rem' : '10rem'" 
-                :height="index == 0 ? `3rem` : index == 1 ? '5rem' : index == 2 ? '2rem' : index == 3 ? '2rem' : '2rem'" 
-                :style="`border-radius: .5rem; margin: 10px 0px;`" 
-            />
-        </div>
-
-        <div v-else class="flex flex-col items-center absolute w-full top-[15%] degree">
-            <h1 class="text-[2rem] text-white items-center flex gap-2 line-clamp-1">
-                <i class="text-[2rem] fa-solid fa-location-dot"></i>
-                <span class="flex-1">{{ homeCurrentData.location.name ?? 'Undefined' }}</span>
-                <p class="pt-4 text-sm line-clamp-1" v-if="homeCurrentData.location.region">/ {{ homeCurrentData.location.region }}</p>
-            </h1>
-            <div class="w-1/2 max-w-[15rem] h-[7rem] flex items-center justify-center my-3">
-                <img
-                    :src="(homeCurrentData.current.condition.icon).replace('64x64', '128x128')"
-                    class="w-[7rem] scale-125 h-[7rem] bg-cover"
-                    :alt="homeCurrentData.current.condition.text"
+    <div class="flex flex-col w-full h-[100vh] parent lg:flex-row-reverse">
+        <div class="relative flex items-center justify-center w-full h-full lg:w-1/2">
+            <div v-if="currentLoading" class="flex flex-col items-center absolute inset-0 lg:inset-auto top-[15%] lg:top-[50%] lg:-translate-y-1/2">
+                <Skeleton
+                    class="animate__animated animate__zoomIn"
+                    v-for="(i, index) in 4"
+                    :key="index"
+                    :width="index == 0 ? `13rem` : index == 1 ? '5rem' : index == 2 ? '6.5rem' : index == 3 ? '10rem' : '10rem'" 
+                    :height="index == 0 ? `3rem` : index == 1 ? '5rem' : index == 2 ? '2rem' : index == 3 ? '2rem' : '2rem'" 
+                    :style="`border-radius: .5rem; margin: 10px 0px;`" 
                 />
             </div>
-            <p class="text-white text-[2.2rem] -mt-2">{{ homeCurrentData.current.condition.text }}</p>
-            <div class="flex gap-x-5">
-                <p class="text-lg text-white">C: {{ homeCurrentData.current.temp_c ?? 0 }}°</p>
-                <p class="text-lg text-white">F: {{ homeCurrentData.current.temp_f ?? 0 }}°F</p>
+
+            <div v-else class="flex flex-col items-center absolute w-full lg:w-[20rem] lg:h-[22rem] justify-center lg:backdrop-blur-3xl lg:bg-[#ffffff32] lg:rounded-[2.5rem] top-[15%] lg:top-1/2 lg:-translate-y-1/2 degree">
+                <h1 class="text-[2rem] text-white items-center flex gap-2 line-clamp-1">
+                    <i class="text-[2rem] fa-solid fa-location-dot"></i>
+                    <span class="flex-1">{{ homeCurrentData.location.name ?? 'Undefined' }}</span>
+                    <p class="pt-4 text-sm line-clamp-1" v-if="homeCurrentData.location.region">/ {{ homeCurrentData.location.region }}</p>
+                </h1>
+                <div class="w-1/2 max-w-[15rem] h-[7rem] flex items-center justify-center my-3">
+                    <img
+                        :src="(homeCurrentData.current.condition.icon).replace('64x64', '128x128')"
+                        class="w-[7rem] scale-125 h-[7rem] bg-cover"
+                        :alt="homeCurrentData.current.condition.text"
+                    />
+                </div>
+                <p class="text-white text-[2.2rem] -mt-2">{{ homeCurrentData.current.condition.text }}</p>
+                <div class="flex gap-x-5">
+                    <p class="text-lg text-white">C: {{ homeCurrentData.current.temp_c ?? 0 }}°</p>
+                    <p class="text-lg text-white">F: {{ homeCurrentData.current.temp_f ?? 0 }}°F</p>
+                </div>
             </div>
+            
+            <p class="absolute inset-0 flex justify-center text-sm text-white top-10 text-opacity-30"> 
+                Last Update : {{ homeCurrentData?.current?.last_updated ?? `--:--:--` }}
+            </p>
         </div>
-        
-        <p class="absolute inset-0 flex justify-center text-sm text-white top-10 text-opacity-30"> 
-            <!-- Last Update : {{ homeCurrentData.current.last_updated ?? `--:--:--` }} -->
-        </p>
 
         <client-only>
-            <div v-if="currentLoading || forecastLoading" class="w-full">
+            <div v-if="currentLoading || forecastLoading" class="relative w-full h-full lg:w-1/2">
                 <Skeleton
-                    class="duration-100 animate__animated animate__slideInUp"
-                    :width="`100%`" 
-                    :height="`8rem`" 
-                    :style="`border-radius: 1rem;border-top-left-radius: 2.5rem; border-top-right-radius: 2.5rem; position: fixed; bottom: 0px`" 
+                    class="duration-100 animate__animated animate__slideInUp rounded-t-[2.5rem] lg:rounded-none bottom-0 lg:inset-0 w-full h-[8rem] lg:h-full"
+                    :style="`position: absolute`" 
                 />
             </div>
-            <Hotbar v-else @openModal="openModal" />
+            <div v-else class="relative w-full h-full lg:w-1/2">
+                <Hotbar @openModal="openModal" />
+            </div>
         </client-only>
 
-        <div class="fixed bottom-0 flex justify-between w-full h-20 px-10 bg-black hotbar-buttons rounded-t-xl">
-            <div class="flex items-center justify-start w-1/3">
+        <div class="fixed flex lg:flex-col items-center justify-between w-11/12 lg:w-[5rem] inset-x-0 lg:inset-y-0 lg:inset-x-auto lg:right-5 lg:top-1/2 lg:-translate-y-1/2 mx-auto h-16 lg:h-1/2 px-10 lg:px-1 lg:py-8 border border-[#aa25c933] rounded-full backdrop-blur-md bottom-5 hotbar-buttons">
+            <div class="flex items-center justify-start w-1/3 lg:justify-center lg:w-full">
                 <button @click="refresh">
                     <lord-icon
                         src="https://cdn.lordicon.com/elzslyvl.json"
@@ -191,8 +184,8 @@
                 </button>
             </div>
 
-            <div class="flex justify-center w-1/3 pt-2.5">
-                <button @click="searchModalIsShow = true" class="flex items-center justify-center transition-all rounded-t-full shadow-md pb-12 w-[7.2rem] h-[7.2rem] addbtn hover:scale-105">
+            <div class="flex justify-center w-1/3 lg:w-full">
+                <button @click="searchModalIsShow = true" class="flex items-center justify-center transition-all rounded-full shadow-md w-[3rem] h-[3rem] addbtn hover:scale-105">
                     <lord-icon
                         src="https://cdn.lordicon.com/zgogqkqu.json"
                         trigger="hover"
@@ -202,7 +195,7 @@
                 </button>
             </div>
 
-            <div class="flex items-center justify-end w-1/3 h-full">
+            <div class="flex items-center justify-end w-1/3 lg:justify-center lg:w-full">
                 <button @click="savedLocationsModalIsShow= true">    
                     <lord-icon
                         src="https://cdn.lordicon.com/dfxesbyu.json"
@@ -265,7 +258,7 @@
     <Modal v-if="savedLocationsModalIsShow" v-model="savedLocationsModalIsShow" title="Saved Locations">
 
         <div class="flex items-center justify-center w-full h-[18rem] loading">
-            <div v-if="Object.keys(homeSavedLoctions).length > 0" class="flex flex-col w-full h-full gap-10 mt-3 overflow-scroll pb-[10%]">
+            <div v-if="Object.keys(homeSavedLoctions).length > 0" class="flex flex-col w-full h-full gap-10 mt-3 overflow-scroll pb-[10%]" v-dragscroll>
                 <SearchResultItem 
                     v-for="(data, index) in homeSavedLoctions" 
                     :id="`search-item-${data.id}`" 
@@ -288,7 +281,7 @@
     <Modal v-if="airQualityModalIsShow" v-model="airQualityModalIsShow" title="Air includes">
 
         <div class="flex items-center justify-center w-full h-[18rem]">
-            <div class="flex flex-col w-full h-full gap-5 mt-3 overflow-scroll pb-[10%]">
+            <div class="flex flex-col w-full h-full gap-5 mt-3 overflow-scroll pb-[10%]" v-dragscroll>
                 <div 
                     class="flex gap-5 air-items" 
                     v-for="(item, index) in Object.keys(homeCurrentData.current.air_quality)" 

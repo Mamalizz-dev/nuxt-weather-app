@@ -22,17 +22,25 @@
 // computed
 
     const hotbarHeightStyle = computed(() => {
-        if (toggleSlide.value){
-            return `${touchCurrentPosition.value}px`
-        } else {
-            if (hotbarPosition.value == 'top'){
-                return `${windowHeight.value - 20}px`
-            } else if (hotbarPosition.value == 'middle') {
-                return `${windowHeight.value / 2 + 25}px`
+        if(isMobile.value){
+            if (toggleSlide.value){
+                return `${touchCurrentPosition.value}px`
             } else {
-                return `8rem`
+                if (hotbarPosition.value == 'top'){
+                    return `${windowHeight.value - 20}px`
+                } else if (hotbarPosition.value == 'middle') {
+                    return `${windowHeight.value / 2 + 25}px`
+                } else {
+                    return `8rem`
+                }
             }
+        } else {
+            return '100vh'
         }
+    })
+
+    const isMobile = computed(() => {
+        return windowWidth.value > 768 ? false : true
     })
 
     const airQualityPercent = computed(() => {
@@ -85,12 +93,12 @@
     
 // watch
 
-    watch([hotbarHeightStyle, hotbarPosition], ([hotbarHeight, status]) => {
+    watch([hotbarHeightStyle, hotbarPosition], ([hotbarHeight, status]: any) => {
         const locationDegrees: HTMLDivElement | null = document.querySelector('.degree')!;
         const locationDetails: HTMLDivElement | null = document.querySelector('.hotbar-details')!;
         const hotbarElement: HTMLDivElement | null = hotbar.value;
         
-        if (locationDegrees && locationDetails && hotbarElement) {
+        if (locationDegrees && locationDetails && hotbarElement && isMobile.value) {
             const screenHeight: number = windowHeight.value;
             const halfScreenHeight: number = screenHeight / 2; // Half of the screen height
             const triggerPosition: number = halfScreenHeight; // The position where we start fading out
@@ -133,8 +141,8 @@
 
 
 <template>
-    <div class="fixed bottom-0 w-full hotbar rounded-t-[2.5rem] transition-all duration-200 ease-out" ref="hotbar" :style="{height: hotbarHeightStyle}">
-        <div class="flex items-center justify-center w-full h-10"
+    <div class="absolute bottom-0 w-full hotbar rounded-t-[2.5rem] lg:rounded-t-none transition-all duration-200 ease-out" ref="hotbar" :style="{height: hotbarHeightStyle}">
+        <div v-if="isMobile" class="flex items-center justify-center w-full h-10"
             @touchstart.passive="toggleMove"
             @touchmove.passive="onTouchMove"
             @touchend.passive="onTouchEnd"
@@ -142,7 +150,7 @@
             <div class="edge" />
         </div>  
 
-        <div class="flex justify-between w-full px-8 py-2">
+        <div class="flex justify-between w-full px-8 py-2" :class="!isMobile ? 'pt-10' : ''">
             <button class="text-white text-md">
                 Hourly Forecast
             </button>
@@ -151,7 +159,7 @@
             </button> -->
         </div>
 
-        <div class="flex w-full gap-5 px-5 py-4 overflow-scroll">
+        <div class="flex w-full gap-5 px-5 py-4 overflow-scroll lg:px-12" v-dragscroll>
             <div v-for="(hour, index) in homeforecastData.forecast.forecastday[0].hour" :key="`day-${index}`" class="w-[4.8rem] shrink-0 min-h-[10rem] rounded-full hotbar-item hourly flex flex-col items-center justify-between px-3 py-5">
                 <p class="text-white text-md">{{ (hour.time).split(' ').pop() }}</p>
                 <!-- <i class="text-white scale-150 fa-solid fa-cloud-showers-heavy"></i> -->
@@ -160,7 +168,7 @@
             </div>
         </div>
 
-        <div class="grid w-full grid-cols-2 gap-5 px-5 py-2 overflow-scroll h-[54vh] pb-[50%] hotbar-details opacity-0 transition-all relative">
+        <div v-dragscroll class="grid w-full grid-cols-2 gap-5 lg:gap-8 px-5 lg:px-12 py-2 overflow-scroll h-[54vh] pb-[50%] lg:pb-0 hotbar-details transition-all relative" :class="isMobile ? 'opacity-0' : ''">
 
             <HotbarItem :icon-classes="`fa-solid fa-heart-pulse`" title="AIR QULITY" :item-classes="`col-span-full justify-between`" >
             
@@ -265,7 +273,7 @@
             </HotbarItem>
             
         </div>
-        <div class="absolute bottom-0 z-10 h-[35%] w-full bg-gradient-to-t from-[rgba(0,0,0,1)] from-[1%] to-transparent" />
+        <div class="absolute bottom-0 z-10 h-[10%] w-full bg-gradient-to-t from-[rgba(0,0,0,1)] from-[1%] to-transparent" />
     </div>
 </template>
 
@@ -273,10 +281,11 @@
 
 .hotbar {
     background: rgba(0, 0, 0, 0.3);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.18);
+    @apply shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] lg:shadow-none
 }
 
 .hotbar-item {
