@@ -70,7 +70,7 @@ const particlesInit = async (engine) => {
           },
           size: {
                 random: true,
-                value: 1.3,
+                value: 3,
             },
         },
         detectRetina: true,

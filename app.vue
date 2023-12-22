@@ -7,7 +7,7 @@
   onMounted(() => {
     
     const tl = gsap.timeline({repeat:-1, repeatDelay:0, yoyo: true})
-    tl.fromTo('body', {background: 'linear-gradient(80deg, #330040 0%, #5d0076'}, {background: 'linear-gradient(360deg, #330040 0%, #5d0076', duration: 10})
+    tl.fromTo('body', {background: 'linear-gradient(0deg, #330040 0%, #5d0076'}, {background: 'linear-gradient(360deg, #301934 0%, #330040', duration: 10, ease:'power3.outIn'})
 
   })
 
@@ -26,10 +26,5 @@
 <style>
 #app {
   overscroll-behavior: none !important;
-}
-
-body{
-  background: rgb(2,12,87);
-  background: linear-gradient(80deg, rgba(2,12,87,1) 0%, rgba(37,4,52,1) 100%);
 }
 </style>

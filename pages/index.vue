@@ -124,7 +124,7 @@
 
     <div class="flex flex-col w-full h-[100vh] parent lg:flex-row-reverse">
         <div class="relative flex items-center justify-center w-full h-full lg:w-1/2">
-            <div v-if="currentLoading" class="flex flex-col items-center absolute inset-0 lg:inset-auto top-[15%] lg:top-[50%] lg:-translate-y-1/2">
+            <div v-if="currentLoading" class="flex flex-col items-center absolute inset-0 lg:inset-auto top-[22%] lg:top-[50%] lg:-translate-y-1/2">
                 <Skeleton
                     class="animate__animated animate__zoomIn"
                     v-for="(i, index) in 4"
@@ -135,7 +135,7 @@
                 />
             </div>
 
-            <div v-else class="flex flex-col items-center absolute w-full lg:w-[20rem] lg:h-[22rem] justify-center lg:backdrop-blur-3xl lg:bg-[#ffffff32] lg:rounded-[2.5rem] top-[15%] lg:top-1/2 lg:-translate-y-1/2 degree">
+            <div v-else class="flex flex-col items-center absolute w-full lg:w-[20rem] lg:h-[22rem] justify-center lg:backdrop-blur-3xl lg:bg-[#ffffff32] lg:rounded-[2.5rem] top-[22%] lg:top-1/2 lg:-translate-y-1/2 degree">
                 <h1 class="text-[2rem] text-white items-center flex gap-2 line-clamp-1">
                     <i class="text-[2rem] fa-solid fa-location-dot"></i>
                     <span class="flex-1">{{ homeCurrentData.location.name ?? 'Undefined' }}</span>
